@@ -3,15 +3,6 @@ package library.assistant.ui.notifoverdue;
 import com.google.common.collect.ImmutableList;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
-import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -35,6 +26,16 @@ import library.assistant.ui.notifoverdue.emailsender.EmailSenderController;
 import library.assistant.ui.settings.Preferences;
 import library.assistant.util.LibraryAssistantUtil;
 
+import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+
 /**
  * FXML Controller class
  *
@@ -42,7 +43,7 @@ import library.assistant.util.LibraryAssistantUtil;
  */
 public class OverdueNotificationController implements Initializable {
 
-    private ObservableList<NotificationItem> list = FXCollections.observableArrayList();
+    private final ObservableList<NotificationItem> list = FXCollections.observableArrayList();
     @FXML
     private StackPane rootPane;
     @FXML
@@ -86,7 +87,7 @@ public class OverdueNotificationController implements Initializable {
         list.clear();
 
         Preferences pref = Preferences.getPreferences();
-        Long overdueBegin = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(pref.getnDaysWithoutFine());
+        long overdueBegin = System.currentTimeMillis() - TimeUnit.DAYS.toMillis(pref.getnDaysWithoutFine());
 
         DatabaseHandler handler = DatabaseHandler.getInstance();
         String qu = "SELECT ISSUE.bookID, ISSUE.memberID, ISSUE.issueTime, MEMBER.name, MEMBER.id, MEMBER.email, BOOK.title FROM ISSUE\n"
@@ -99,9 +100,7 @@ public class OverdueNotificationController implements Initializable {
             PreparedStatement statement = handler.getConnection().prepareStatement(qu);
             statement.setTimestamp(1, new Timestamp(overdueBegin));
             ResultSet rs = statement.executeQuery();
-            int counter = 0;
             while (rs.next()) {
-                counter += 1;
                 String memberName = rs.getString("name");
                 String memberID = rs.getString("id");
                 String email = rs.getString("email");
@@ -109,7 +108,7 @@ public class OverdueNotificationController implements Initializable {
                 String bookTitle = rs.getString("title");
                 Timestamp issueTime = rs.getTimestamp("issueTime");
                 System.out.println("Issued on " + issueTime);
-                Integer days = Math.toIntExact(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - issueTime.getTime())) + 1;
+                int days = Math.toIntExact(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - issueTime.getTime())) + 1;
                 Float fine = LibraryAssistantUtil.getFineAmount(days);
 
                 NotificationItem item = new NotificationItem(true, memberID, memberName, email, bookTitle, LibraryAssistantUtil.getDateString(issueTime), days, fine);
@@ -121,8 +120,8 @@ public class OverdueNotificationController implements Initializable {
     }
 
     @FXML
-    private void handleSendNotificationAction(ActionEvent event) {
-        List<NotificationItem> selectedItems = list.stream().filter(item -> item.getNotify()).collect(Collectors.toList());
+    private void handleSendNotificationAction() {
+        List<NotificationItem> selectedItems = list.stream().filter(NotificationItem::getNotify).collect(Collectors.toList());
         if (selectedItems.isEmpty()) {
             AlertMaker.showErrorMessage("Nothing Selected", "Nothing selected to notify");
             return;
@@ -137,9 +136,7 @@ public class OverdueNotificationController implements Initializable {
 
     private void checkForMailServerConfig() {
         JFXButton button = new JFXButton("Okay");
-        button.setOnAction((ActionEvent event) -> {
-            ((Stage) rootPane.getScene().getWindow()).close();
-        });
+        button.setOnAction((ActionEvent event) -> ((Stage) rootPane.getScene().getWindow()).close());
         MailServerInfo mailServerInfo = DataHelper.loadMailServerInfo();
         System.out.println(mailServerInfo);
         if (mailServerInfo == null || !mailServerInfo.validate()) {
@@ -155,9 +152,7 @@ public class OverdueNotificationController implements Initializable {
             NotificationItem item = param.getValue();
             JFXCheckBox checkBox = new JFXCheckBox();
             checkBox.selectedProperty().setValue(item.getNotify());
-            checkBox.selectedProperty().addListener((ov, old_val, new_val) -> {
-                item.setNotify(new_val);
-            });
+            checkBox.selectedProperty().addListener((ov, old_val, new_val) -> item.setNotify(new_val));
             return new SimpleObjectProperty<>(checkBox);
         }
     }

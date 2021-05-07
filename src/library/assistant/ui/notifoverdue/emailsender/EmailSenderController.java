@@ -34,7 +34,7 @@ public class EmailSenderController implements Initializable {
     private Text text;
 
     private List<NotificationItem> list;
-    private StringBuilder emailText = new StringBuilder();
+    private final StringBuilder emailText = new StringBuilder();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

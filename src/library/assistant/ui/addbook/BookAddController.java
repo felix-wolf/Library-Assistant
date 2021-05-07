@@ -2,14 +2,6 @@ package library.assistant.ui.addbook;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
@@ -21,6 +13,14 @@ import library.assistant.database.DataHelper;
 import library.assistant.database.DatabaseHandler;
 import library.assistant.ui.listbook.BookListController;
 import org.apache.commons.lang3.StringUtils;
+
+import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class BookAddController implements Initializable {
 
@@ -50,7 +50,7 @@ public class BookAddController implements Initializable {
     }
 
     @FXML
-    private void addBook(ActionEvent event) {
+    private void addBook() {
         String bookID = StringUtils.trimToEmpty(id.getText());
         String bookAuthor = StringUtils.trimToEmpty(author.getText());
         String bookName = StringUtils.trimToEmpty(title.getText());
@@ -82,7 +82,7 @@ public class BookAddController implements Initializable {
     }
 
     @FXML
-    private void cancel(ActionEvent event) {
+    private void cancel() {
         Stage stage = (Stage) rootPane.getScene().getWindow();
         stage.close();
     }

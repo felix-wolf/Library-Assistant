@@ -2,10 +2,7 @@ package library.assistant.ui.mail;
 
 import com.jfoenix.controls.JFXProgressBar;
 import com.jfoenix.controls.JFXTextField;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import library.assistant.alert.AlertMaker;
@@ -16,6 +13,9 @@ import library.assistant.util.LibraryAssistantUtil;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -43,7 +43,7 @@ public class TestMailController implements Initializable, GenericCallback {
     }
 
     @FXML
-    private void handleStartAction(ActionEvent event) {
+    private void handleStartAction() {
         String toAddress = recepientAddressInput.getText();
         if (LibraryAssistantUtil.validateEmailAddress(toAddress)) {
             EmailUtil.sendTestMail(mailServerInfo, toAddress, this);

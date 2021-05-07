@@ -1,10 +1,16 @@
 package library.assistant.encryption;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,16 +18,6 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class EncryptionUtil {
 
@@ -40,7 +36,7 @@ public class EncryptionUtil {
             }
             return encrypt(spec.getKey(), spec.getIV(), plainText);
         } catch (Exception ex) {
-            LOGGER.log(Level.ERROR, "Encryption failure", ex.toString());
+            LOGGER.log(Level.ERROR, "Encryption failure: {}", ex.toString());
         } finally {
             LOCK.unlock();
         }
@@ -56,7 +52,7 @@ public class EncryptionUtil {
             }
             return decrypt(spec.getKey(), spec.getIV(), cipherText);
         } catch (Exception ex) {
-            LOGGER.log(Level.ERROR, "Encryption failure", ex.toString());
+            LOGGER.log(Level.ERROR, "Encryption failure: {}", ex.toString());
         } finally {
             LOCK.unlock();
         }
@@ -113,8 +109,7 @@ public class EncryptionUtil {
         KeyGenerator keyGen = KeyGenerator.getInstance(SECRET_KEY_SPEC);
         keyGen.init(128);
         SecretKey secretKey = keyGen.generateKey();
-        byte[] data = secretKey.getEncoded();
-        return data;
+        return secretKey.getEncoded();
     }
 
     private static byte[] prepareIV() throws NoSuchAlgorithmException {

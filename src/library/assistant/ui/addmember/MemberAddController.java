@@ -2,10 +2,6 @@ package library.assistant.ui.addmember;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
@@ -17,6 +13,10 @@ import library.assistant.database.DatabaseHandler;
 import library.assistant.ui.listmember.MemberListController;
 import library.assistant.ui.listmember.MemberListController.Member;
 import org.apache.commons.lang3.StringUtils;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 public class MemberAddController implements Initializable {
 
@@ -47,19 +47,19 @@ public class MemberAddController implements Initializable {
     }
 
     @FXML
-    private void cancel(ActionEvent event) {
+    private void cancel() {
         Stage stage = (Stage) name.getScene().getWindow();
         stage.close();
     }
 
     @FXML
-    private void addMember(ActionEvent event) {
+    private void addMember() {
         String mName = StringUtils.trimToEmpty(name.getText());
         String mID = StringUtils.trimToEmpty(id.getText());
         String mMobile = StringUtils.trimToEmpty(mobile.getText());
         String mEmail = StringUtils.trimToEmpty(email.getText());
 
-        Boolean flag = mName.isEmpty() || mID.isEmpty() || mMobile.isEmpty() || mEmail.isEmpty();
+        boolean flag = mName.isEmpty() || mID.isEmpty() || mMobile.isEmpty() || mEmail.isEmpty();
         if (flag) {
             AlertMaker.showMaterialDialog(rootPane, mainContainer, new ArrayList<>(), "Insufficient Data", "Please enter data in all fields.");
             return;

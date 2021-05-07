@@ -44,7 +44,7 @@ public class LibraryAssistantUtil {
             FXMLLoader loader = new FXMLLoader(loc);
             Parent parent = loader.load();
             controller = loader.getController();
-            Stage stage = null;
+            Stage stage;
             if (parentStage != null) {
                 stage = parentStage;
             } else {
@@ -62,8 +62,8 @@ public class LibraryAssistantUtil {
 
     public static Float getFineAmount(int totalDays) {
         Preferences pref = Preferences.getPreferences();
-        Integer fineDays = totalDays - pref.getnDaysWithoutFine();
-        Float fine = 0f;
+        int fineDays = totalDays - pref.getnDaysWithoutFine();
+        float fine = 0f;
         if (fineDays > 0) {
             fine = fineDays * pref.getFinePerDay();
         }

@@ -1,12 +1,5 @@
 package library.assistant.ui.about;
 
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -16,6 +9,13 @@ import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import library.assistant.alert.AlertMaker;
 import library.assistant.util.LibraryAssistantUtil;
+
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class AboutController implements Initializable {
 
@@ -51,22 +51,22 @@ public class AboutController implements Initializable {
     }
 
     @FXML
-    private void loadYoutubeChannel(ActionEvent event) {
+    private void loadYoutubeChannel() {
         loadWebpage(YOUTUBE);
     }
 
     @FXML
-    private void loadBlog(ActionEvent event) {
+    private void loadBlog() {
         loadWebpage(WEBSITE);
     }
 
     @FXML
-    private void loadLinkedIN(ActionEvent event) {
+    private void loadLinkedIN() {
         loadWebpage(LINKED_IN);
     }
 
     @FXML
-    private void loadFacebook(ActionEvent event) {
+    private void loadFacebook() {
         loadWebpage(FACEBOOK);
     }
 }

@@ -1,20 +1,8 @@
 package library.assistant.ui.listbook;
 
-import java.io.IOException;
-import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -35,9 +23,17 @@ import library.assistant.ui.addbook.BookAddController;
 import library.assistant.ui.main.MainController;
 import library.assistant.util.LibraryAssistantUtil;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class BookListController implements Initializable {
 
-    ObservableList<Book> list = FXCollections.observableArrayList();
+    final ObservableList<Book> list = FXCollections.observableArrayList();
 
     @FXML
     private StackPane rootPane;
@@ -99,7 +95,7 @@ public class BookListController implements Initializable {
     }
 
     @FXML
-    private void handleBookDeleteOption(ActionEvent event) {
+    private void handleBookDeleteOption() {
         //Fetch the selected row
         Book selectedForDeletion = tableView.getSelectionModel().getSelectedItem();
         if (selectedForDeletion == null) {
@@ -115,7 +111,7 @@ public class BookListController implements Initializable {
         alert.setContentText("Are you sure want to delete the book " + selectedForDeletion.getTitle() + " ?");
         Optional<ButtonType> answer = alert.showAndWait();
         if (answer.get() == ButtonType.OK) {
-            Boolean result = DatabaseHandler.getInstance().deleteBook(selectedForDeletion);
+            boolean result = DatabaseHandler.getInstance().deleteBook(selectedForDeletion);
             if (result) {
                 AlertMaker.showSimpleAlert("Book deleted", selectedForDeletion.getTitle() + " was deleted successfully.");
                 list.remove(selectedForDeletion);
@@ -128,7 +124,7 @@ public class BookListController implements Initializable {
     }
 
     @FXML
-    private void handleBookEditOption(ActionEvent event) {
+    private void handleBookEditOption() {
         //Fetch the selected row
         Book selectedForEdit = tableView.getSelectionModel().getSelectedItem();
         if (selectedForEdit == null) {
@@ -139,7 +135,7 @@ public class BookListController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/library/assistant/ui/addbook/add_book.fxml"));
             Parent parent = loader.load();
 
-            BookAddController controller = (BookAddController) loader.getController();
+            BookAddController controller = loader.getController();
             controller.inflateUI(selectedForEdit);
 
             Stage stage = new Stage(StageStyle.DECORATED);
@@ -148,9 +144,7 @@ public class BookListController implements Initializable {
             stage.show();
             LibraryAssistantUtil.setStageIcon(stage);
 
-            stage.setOnHiding((e) -> {
-                handleRefresh(new ActionEvent());
-            });
+            stage.setOnHiding((e) -> handleRefresh());
 
         } catch (IOException ex) {
             Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex.toString());
@@ -158,12 +152,12 @@ public class BookListController implements Initializable {
     }
 
     @FXML
-    private void handleRefresh(ActionEvent event) {
+    private void handleRefresh() {
         loadData();
     }
 
     @FXML
-    private void exportAsPDF(ActionEvent event) {
+    private void exportAsPDF() {
         List<List> printData = new ArrayList<>();
         String[] headers = {"   Title   ", "ID", "  Author  ", "  Publisher ", "Avail"};
         printData.add(Arrays.asList(headers));
@@ -173,14 +167,14 @@ public class BookListController implements Initializable {
             row.add(book.getId());
             row.add(book.getAuthor());
             row.add(book.getPublisher());
-            row.add(book.getAvailabilty());
+            row.add(book.getAvailability());
             printData.add(row);
         }
         LibraryAssistantUtil.initPDFExprot(rootPane, contentPane, getStage(), printData);
     }
 
     @FXML
-    private void closeStage(ActionEvent event) {
+    private void closeStage() {
         getStage().close();
     }
 
@@ -190,7 +184,7 @@ public class BookListController implements Initializable {
         private final SimpleStringProperty id;
         private final SimpleStringProperty author;
         private final SimpleStringProperty publisher;
-        private final SimpleStringProperty availabilty;
+        private final SimpleStringProperty availability;
 
         public Book(String title, String id, String author, String pub, Boolean avail) {
             this.title = new SimpleStringProperty(title);
@@ -198,9 +192,9 @@ public class BookListController implements Initializable {
             this.author = new SimpleStringProperty(author);
             this.publisher = new SimpleStringProperty(pub);
             if (avail) {
-                this.availabilty = new SimpleStringProperty("Available");
+                this.availability = new SimpleStringProperty("Available");
             } else {
-                this.availabilty = new SimpleStringProperty("Issued");
+                this.availability = new SimpleStringProperty("Issued");
             }
         }
 
@@ -220,8 +214,8 @@ public class BookListController implements Initializable {
             return publisher.get();
         }
 
-        public String getAvailabilty() {
-            return availabilty.get();
+        public String getAvailability() {
+            return availability.get();
         }
 
     }

@@ -90,7 +90,7 @@
                               <HBox alignment="CENTER" prefHeight="43.0" prefWidth="512.0" spacing="25.0">
                                  <children>
                                     <JFXButton onAction="#handleTestMailAction" prefHeight="43.0" prefWidth="183.0" text="Send Test Mail" />
-                                    <JFXButton onAction="#saveMailServerConfuration" prefHeight="100.0" prefWidth="100.0" text="Save" />
+                                    <JFXButton onAction="#saveMailServerConfiguration" prefHeight="100.0" prefWidth="100.0" text="Save" />
                                  </children>
                                  <VBox.margin>
                                     <Insets top="10.0" />

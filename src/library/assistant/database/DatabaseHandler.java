@@ -104,12 +104,12 @@ public final class DatabaseHandler {
     private static Set<String> getDBTables() throws SQLException {
         Set<String> set = new HashSet<>();
         DatabaseMetaData dbmeta = conn.getMetaData();
-        readDBTable(set, dbmeta, "TABLE", null);
+        readDBTable(set, dbmeta);
         return set;
     }
 
-    private static void readDBTable(Set<String> set, DatabaseMetaData dbmeta, String searchCriteria, String schema) throws SQLException {
-        ResultSet rs = dbmeta.getTables(null, schema, null, new String[]{searchCriteria});
+    private static void readDBTable(Set<String> set, DatabaseMetaData dbmeta) throws SQLException {
+        ResultSet rs = dbmeta.getTables(null, null, null, new String[]{"TABLE"});
         while (rs.next()) {
             set.add(rs.getString("TABLE_NAME").toLowerCase());
         }

@@ -5,11 +5,11 @@ package library.assistant.data.model;
  */
 public class MailServerInfo {
 
-    private String mailServer;
-    private Integer port;
-    private String emailID;
-    private String password;
-    private Boolean sslEnabled;
+    private final String mailServer;
+    private final Integer port;
+    private final String emailID;
+    private final String password;
+    private final Boolean sslEnabled;
     
     public MailServerInfo(String mailServer, Integer port, String emailID, String password, Boolean sslEnabled) {
         this.mailServer = mailServer;

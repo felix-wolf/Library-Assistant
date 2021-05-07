@@ -34,7 +34,7 @@ import library.assistant.util.LibraryAssistantUtil;
  */
 public class IssuedListController implements Initializable {
 
-    private ObservableList<IssueInfo> list = FXCollections.observableArrayList();
+    private final ObservableList<IssueInfo> list = FXCollections.observableArrayList();
     private BookReturnCallback callback;
 
     @FXML
@@ -98,7 +98,7 @@ public class IssuedListController implements Initializable {
                 String bookTitle = rs.getString("title");
                 Timestamp issueTime = rs.getTimestamp("issueTime");
                 System.out.println("Issued on " + issueTime);
-                Integer days = Math.toIntExact(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - issueTime.getTime())) + 1;
+                int days = Math.toIntExact(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - issueTime.getTime())) + 1;
                 Float fine = LibraryAssistantUtil.getFineAmount(days);
                 IssueInfo issueInfo = new IssueInfo(counter, bookID, bookTitle, memberName, LibraryAssistantUtil.formatDateTimeString(new Date(issueTime.getTime())), days, fine);
                 list.add(issueInfo);
