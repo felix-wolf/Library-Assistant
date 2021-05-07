@@ -23,6 +23,7 @@ public class DataHelperTest {
         DataHelper.wipeTable("BOOK");
         DataHelper.wipeTable("MAIL_SERVER_INFO");
         DataHelper.wipeTable("ISSUE");
+        System.out.println("Test Database wiped");
     }
 
     @Test
