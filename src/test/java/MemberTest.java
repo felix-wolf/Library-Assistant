@@ -7,46 +7,19 @@ import library.assistant.ui.listbook.BookListController;
 import library.assistant.ui.listmember.MemberListController;
 import org.junit.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class DataHelperTest {
+public class MemberTest {
     final String id = "134565432135";
-    final Book bookModel = new Book(id, "",  "", "", true);
-    final BookListController.Book bookControllerModel = new BookListController.Book("", id, "", "", true);
-
     final MemberListController.Member member = new MemberListController.Member("", id, "", "");
 
-    public DataHelperTest() {
+    public MemberTest() {
         // WIPE DATABASE
+        DataHelper.wipeTable("Issue");
         DataHelper.wipeTable("Member");
-        DataHelper.wipeTable("BOOK");
-        DataHelper.wipeTable("MAIL_SERVER_INFO");
-        DataHelper.wipeTable("ISSUE");
+        DataHelper.wipeTable("Book");
         System.out.println("Test Database wiped");
-    }
-
-    @Test
-    public void addBookTest() {
-        assertTrue(DataHelper.insertNewBook(bookModel));
-    }
-
-    @Test
-    public void bookExistsTest() {
-        DataHelper.insertNewBook(bookModel);
-        assertTrue(DataHelper.isBookExists(id));
-    }
-
-    @Test
-    public void deleteBookTest() {
-        DataHelper.insertNewBook(bookModel);
-        assertTrue(DatabaseHandler.getInstance().deleteBook(bookControllerModel));
-    }
-
-    @Test
-    public void getBookInfoTest() {
-        DataHelper.insertNewBook(bookModel);
-        assertNotNull(DataHelper.getBookInfoWithIssueData(id));
     }
 
     @Test
@@ -55,16 +28,35 @@ public class DataHelperTest {
         assertTrue(DataHelper.isMemberExists(id));
     }
 
+    /**
+     * Test member exists function
+     */
     @Test
-    public void bookMemberTest() {
+    public void memberDoesExistTest() {
         DataHelper.insertNewMember(member);
         assertTrue(DataHelper.isMemberExists(id));
     }
 
+    /**
+     * Test member deletion
+     */
     @Test
     public void deleteMemberTest() {
         DataHelper.insertNewMember(member);
         assertTrue(DatabaseHandler.getInstance().deleteMember(member));
+    }
+
+    /**
+     * test if a member has books
+     */
+    @Test
+    public void memberBooksTest() {
+        DataHelper.insertNewMember(member);
+        assertFalse(DatabaseHandler.getInstance().isMemberHasAnyBooks(member));
+        DataHelper.insertNewBook(new Book(id, "", "", "", true));
+        DatabaseHandler.getInstance().execAction("INSERT INTO ISSUE(memberID,bookID) VALUES ('" + id + "', '" + id + "')");
+        assertTrue(DatabaseHandler.getInstance().isMemberHasAnyBooks(member));
+
     }
 
 }
