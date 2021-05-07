@@ -139,8 +139,10 @@ public class AlertMaker {
             trayIcon.setImageAutoSize(true);
             trayIcon.setToolTip("Library Assistant");
             tray.add(trayIcon);
-            trayIcon.displayMessage(title, message, MessageType.INFO);
-            tray.remove(trayIcon);
+            if (!System.getProperty("os.name").toLowerCase().contains("mac")) {
+                trayIcon.displayMessage(title, message, MessageType.INFO);
+                tray.remove(trayIcon);
+            }
         } catch (Exception exp) {
             exp.printStackTrace();
         }
