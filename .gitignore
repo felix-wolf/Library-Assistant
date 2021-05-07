@@ -1,6 +1,7 @@
 /build/
 /dist/
 /database/
+/database_test/
 /derby.log
 /logs/
 /config.txt

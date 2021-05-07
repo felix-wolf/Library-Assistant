@@ -1,22 +1,8 @@
 package library.assistant.database;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
-import javax.swing.JOptionPane;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import library.assistant.ui.listbook.BookListController.Book;
 import library.assistant.ui.listmember.MemberListController;
 import org.apache.logging.log4j.Level;
@@ -27,6 +13,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public final class DatabaseHandler {
 
     private final static Logger LOGGER = LogManager.getLogger(DatabaseHandler.class.getName());
@@ -34,6 +29,7 @@ public final class DatabaseHandler {
     private static DatabaseHandler handler = null;
 
     private static final String DB_URL = "jdbc:derby:database;create=true";
+    private static final String TEST_DB_URL = "jdbc:derby:database_test;create=true";
     private static Connection conn = null;
     private static Statement stmt = null;
 
@@ -50,6 +46,17 @@ public final class DatabaseHandler {
             handler = new DatabaseHandler();
         }
         return handler;
+    }
+
+    public static boolean isJUnitTest() {
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+            if (element.getClassName().startsWith("org.junit.")) {
+                System.out.println("is junit test: TRUE");
+                return true;
+            }
+        }
+        System.out.println("is junit test: FALSE");
+        return false;
     }
 
     private static void inflateDB() {
@@ -86,9 +93,8 @@ public final class DatabaseHandler {
     private static void createConnection() {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
-            conn = DriverManager.getConnection(DB_URL);
-        }
-        catch (Exception e) {
+            conn = DriverManager.getConnection(isJUnitTest() ? TEST_DB_URL : DB_URL);
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Cant load database", "Database Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
