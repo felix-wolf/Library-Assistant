@@ -12,20 +12,17 @@ import static org.junit.Assert.assertTrue;
 
 public class DataHelperTest {
     final String id = "134565432135";
-    Book bookModel = new Book(id, "Aula International 1", "Jaime Corpas", "Klett", true);
-    BookListController.Book bookControllerModel = new BookListController.Book("Aula International 1", id, "Jaime Corpas", "Klett", true);
+    final Book bookModel = new Book(id, "",  "", "", true);
+    final BookListController.Book bookControllerModel = new BookListController.Book("", id, "", "", true);
 
-    MemberListController.Member member = new MemberListController.Member("", id, "", "");
+    final MemberListController.Member member = new MemberListController.Member("", id, "", "");
 
     public DataHelperTest() {
-        if (DataHelper.isBookExists(id)) {
-            DatabaseHandler.getInstance().deleteBook(bookControllerModel);
-            System.out.println("Deleted Test Book");
-        }
-        if (DataHelper.isMemberExists(id)) {
-            System.out.println("Deleted Test Member");
-            DatabaseHandler.getInstance().deleteMember(member);
-        }
+        // WIPE DATABASE
+        DataHelper.wipeTable("Member");
+        DataHelper.wipeTable("BOOK");
+        DataHelper.wipeTable("MAIL_SERVER_INFO");
+        DataHelper.wipeTable("ISSUE");
     }
 
     @Test
