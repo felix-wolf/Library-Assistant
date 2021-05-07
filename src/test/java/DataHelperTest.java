@@ -12,13 +12,13 @@ import static org.junit.Assert.assertTrue;
 
 public class DataHelperTest {
     final String id = "134565432135";
-    final Book bookModel = new Book(id, "Aula International 1", "Jaime Corpas", "Klett", true);
-    final BookListController.Book bookControllerModel = new BookListController.Book("Aula International 1", id, "Jaime Corpas", "Klett", true);
+    final Book bookModel = new Book(id, "",  "", "", true);
+    final BookListController.Book bookControllerModel = new BookListController.Book("", id, "", "", true);
 
     final MemberListController.Member member = new MemberListController.Member("", id, "", "");
 
     public DataHelperTest() {
-        // WIPE DATABSE
+        // WIPE DATABASE
         DataHelper.wipeTable("Member");
         DataHelper.wipeTable("BOOK");
         DataHelper.wipeTable("MAIL_SERVER_INFO");
