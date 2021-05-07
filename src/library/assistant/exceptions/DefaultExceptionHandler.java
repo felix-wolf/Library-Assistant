@@ -15,6 +15,6 @@ public class DefaultExceptionHandler implements UncaughtExceptionHandler {
 
     @Override
     public void uncaughtException(Thread thread, Throwable ex) {
-        LOGGER.log(Level.ERROR, "Exception occurred {}", ex);
+        LOGGER.log(Level.ERROR, "Exception occurred {}", ex.toString());
     }
 }

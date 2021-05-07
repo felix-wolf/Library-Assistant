@@ -1,22 +1,7 @@
 package library.assistant.ui.main;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDrawer;
-import com.jfoenix.controls.JFXHamburger;
-import com.jfoenix.controls.JFXTabPane;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
-import java.io.IOException;
-import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,7 +9,6 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
@@ -44,6 +28,18 @@ import library.assistant.ui.callback.BookReturnCallback;
 import library.assistant.ui.issuedlist.IssuedListController;
 import library.assistant.ui.main.toolbar.ToolbarController;
 import library.assistant.util.LibraryAssistantUtil;
+
+import java.io.IOException;
+import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MainController implements Initializable, BookReturnCallback {
 
@@ -138,12 +134,12 @@ public class MainController implements Initializable, BookReturnCallback {
 
         String id = bookIDInput.getText();
         ResultSet rs = DataHelper.getBookInfoWithIssueData(id);
-        Boolean flag = false;
+        boolean flag = false;
         try {
             if (rs.next()) {
                 String bName = rs.getString("title");
                 String bAuthor = rs.getString("author");
-                Boolean bStatus = rs.getBoolean("isAvail");
+                boolean bStatus = rs.getBoolean("isAvail");
                 Timestamp issuedOn = rs.getTimestamp("issueTime");
 
                 bookName.setText(bName);
@@ -166,7 +162,7 @@ public class MainController implements Initializable, BookReturnCallback {
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
     }
 
@@ -189,7 +185,7 @@ public class MainController implements Initializable, BookReturnCallback {
         String id = memberIDInput.getText();
         String qu = "SELECT * FROM MEMBER WHERE id = '" + id + "'";
         ResultSet rs = databaseHandler.execQuery(qu);
-        Boolean flag = false;
+        boolean flag = false;
         try {
             while (rs.next()) {
                 String mName = rs.getString("name");
@@ -207,7 +203,7 @@ public class MainController implements Initializable, BookReturnCallback {
                 btnIssue.requestFocus();
             }
         } catch (SQLException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
     }
 
@@ -295,7 +291,7 @@ public class MainController implements Initializable, BookReturnCallback {
                 Timestamp mIssueTime = rs.getTimestamp("issueTime");
                 Date dateOfIssue = new Date(mIssueTime.getTime());
                 issueDateHolder.setText(LibraryAssistantUtil.formatDateTimeString(dateOfIssue));
-                Long timeElapsed = System.currentTimeMillis() - mIssueTime.getTime();
+                long timeElapsed = System.currentTimeMillis() - mIssueTime.getTime();
                 Long days = TimeUnit.DAYS.convert(timeElapsed, TimeUnit.MILLISECONDS) + 1;
                 String daysElapsed = String.format("Used %d days", days);
                 numberDaysHolder.setText(daysElapsed);
@@ -446,7 +442,7 @@ public class MainController implements Initializable, BookReturnCallback {
             ToolbarController controller = loader.getController();
             controller.setBookReturnCallback(this);
         } catch (IOException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
         HamburgerSlideCloseTransition task = new HamburgerSlideCloseTransition(hamburger);
         task.setRate(-1);

@@ -40,7 +40,7 @@ public class EncryptionUtil {
             }
             return encrypt(spec.getKey(), spec.getIV(), plainText);
         } catch (Exception ex) {
-            LOGGER.log(Level.ERROR, "Encryption failure", ex);
+            LOGGER.log(Level.ERROR, "Encryption failure", ex.toString());
         } finally {
             LOCK.unlock();
         }
@@ -56,7 +56,7 @@ public class EncryptionUtil {
             }
             return decrypt(spec.getKey(), spec.getIV(), cipherText);
         } catch (Exception ex) {
-            LOGGER.log(Level.ERROR, "Encryption failure", ex);
+            LOGGER.log(Level.ERROR, "Encryption failure", ex.toString());
         } finally {
             LOCK.unlock();
         }

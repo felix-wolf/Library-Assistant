@@ -70,12 +70,12 @@ public class Preferences {
             writer = new FileWriter(CONFIG_FILE);
             gson.toJson(preference, writer);
         } catch (IOException ex) {
-            Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex.toString());
         } finally {
             try {
                 writer.close();
             } catch (IOException ex) {
-                Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex.toString());
             }
         }
     }
@@ -101,13 +101,13 @@ public class Preferences {
 
             AlertMaker.showSimpleAlert("Success", "Settings updated");
         } catch (IOException ex) {
-            Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex.toString());
             AlertMaker.showErrorMessage(ex, "Failed", "Cant save configuration file");
         } finally {
             try {
                 writer.close();
             } catch (IOException ex) {
-                Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Preferences.class.getName()).log(Level.SEVERE, null, ex.toString());
             }
         }
     }

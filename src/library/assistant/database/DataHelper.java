@@ -30,7 +30,7 @@ public class DataHelper {
             statement.setBoolean(5, book.getAvailability());
             return statement.executeUpdate() > 0;
         } catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -45,15 +45,15 @@ public class DataHelper {
             statement.setString(4, member.getEmail());
             return statement.executeUpdate() > 0;
         } catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.getErrorCode());
         }
         return false;
     }
 
     public static boolean isBookExists(String id) {
         try {
-            String checkstmt = "SELECT COUNT(*) FROM BOOK WHERE id=?";
-            PreparedStatement stmt = DatabaseHandler.getInstance().getConnection().prepareStatement(checkstmt);
+            String statement = "SELECT COUNT(*) FROM BOOK WHERE id=?";
+            PreparedStatement stmt = DatabaseHandler.getInstance().getConnection().prepareStatement(statement);
             stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -62,15 +62,15 @@ public class DataHelper {
                 return (count > 0);
             }
         } catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
 
     public static boolean isMemberExists(String id) {
         try {
-            String checkstmt = "SELECT COUNT(*) FROM MEMBER WHERE id=?";
-            PreparedStatement stmt = DatabaseHandler.getInstance().getConnection().prepareStatement(checkstmt);
+            String statement = "SELECT COUNT(*) FROM MEMBER WHERE id=?";
+            PreparedStatement stmt = DatabaseHandler.getInstance().getConnection().prepareStatement(statement);
             stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -79,7 +79,7 @@ public class DataHelper {
                 return (count > 0);
             }
         } catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -89,10 +89,9 @@ public class DataHelper {
             String query = "SELECT BOOK.title, BOOK.author, BOOK.isAvail, ISSUE.issueTime FROM BOOK LEFT JOIN ISSUE on BOOK.id = ISSUE.bookID where BOOK.id = ?";
             PreparedStatement stmt = DatabaseHandler.getInstance().getConnection().prepareStatement(query);
             stmt.setString(1, id);
-            ResultSet rs = stmt.executeQuery();
-            return rs;
+            return stmt.executeQuery();
         } catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return null;
     }
@@ -102,7 +101,7 @@ public class DataHelper {
             Statement statement = DatabaseHandler.getInstance().getConnection().createStatement();
             statement.execute("DELETE FROM " + tableName + " WHERE TRUE");
         } catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
     }
 
@@ -118,15 +117,15 @@ public class DataHelper {
             statement.setBoolean(5, mailServerInfo.getSslEnabled());
             return statement.executeUpdate() > 0;
         } catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
 
     public static MailServerInfo loadMailServerInfo() {
         try {
-            String checkstmt = "SELECT * FROM MAIL_SERVER_INFO";
-            PreparedStatement stmt = DatabaseHandler.getInstance().getConnection().prepareStatement(checkstmt);
+            String statement = "SELECT * FROM MAIL_SERVER_INFO";
+            PreparedStatement stmt = DatabaseHandler.getInstance().getConnection().prepareStatement(statement);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 String mailServer = rs.getString("server_name");
@@ -137,7 +136,7 @@ public class DataHelper {
                 return new MailServerInfo(mailServer, port, emailID, userPassword, sslEnabled);
             }
         } catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return null;
     }

@@ -92,7 +92,7 @@ public class BookListController implements Initializable {
 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(BookAddController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BookAddController.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
 
         tableView.setItems(list);
@@ -153,7 +153,7 @@ public class BookListController implements Initializable {
             });
 
         } catch (IOException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
     }
 

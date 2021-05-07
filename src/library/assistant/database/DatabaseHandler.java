@@ -66,7 +66,7 @@ public final class DatabaseHandler {
             System.out.println("Already loaded tables " + loadedTables);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(DatabaseHandler.class.getClass().getResourceAsStream("/resources/database/tables.xml"));
+            Document doc = dBuilder.parse(DatabaseHandler.class.getResourceAsStream("/resources/database/tables.xml"));
             NodeList nList = doc.getElementsByTagName("table-entry");
             for (int i = 0; i < nList.getLength(); i++) {
                 Node nNode = nList.item(i);
@@ -86,7 +86,7 @@ public final class DatabaseHandler {
             }
         }
         catch (Exception ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
     }
 
@@ -98,6 +98,7 @@ public final class DatabaseHandler {
             JOptionPane.showMessageDialog(null, "Cant load database", "Database Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
+
     }
 
     private static Set<String> getDBTables() throws SQLException {
@@ -124,8 +125,6 @@ public final class DatabaseHandler {
             System.out.println("Exception at execQuery:dataHandler" + ex.getLocalizedMessage());
             return null;
         }
-        finally {
-        }
         return result;
     }
 
@@ -140,8 +139,6 @@ public final class DatabaseHandler {
             System.out.println("Exception at execQuery:dataHandler" + ex.getLocalizedMessage());
             return false;
         }
-        finally {
-        }
     }
 
     public boolean deleteBook(Book book) {
@@ -155,7 +152,7 @@ public final class DatabaseHandler {
             }
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -173,7 +170,7 @@ public final class DatabaseHandler {
             }
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -189,7 +186,7 @@ public final class DatabaseHandler {
             }
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -207,7 +204,7 @@ public final class DatabaseHandler {
             }
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -224,7 +221,7 @@ public final class DatabaseHandler {
             return (res > 0);
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -241,7 +238,7 @@ public final class DatabaseHandler {
             return (res > 0);
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }

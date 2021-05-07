@@ -55,7 +55,7 @@ public class LibraryAssistantUtil {
             stage.show();
             setStageIcon(stage);
         } catch (IOException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
         return controller;
     }
@@ -117,7 +117,7 @@ public class LibraryAssistantUtil {
             Desktop desktop = Desktop.getDesktop();
             desktop.open(file);
         } catch (IOException ex) {
-            Logger.getLogger(LibraryAssistantUtil.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LibraryAssistantUtil.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
     }
 }

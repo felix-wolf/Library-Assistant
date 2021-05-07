@@ -72,7 +72,7 @@ public class LoginController implements Initializable {
             LibraryAssistantUtil.setStageIcon(stage);
         }
         catch (IOException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
     }
 
