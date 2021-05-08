@@ -40,6 +40,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static library.assistant.database.SQLStatements.*;
+
 public class MainController implements Initializable, BookReturnCallback {
 
     private static final String BOOK_NOT_AVAILABLE = "Not Available";
@@ -182,8 +184,7 @@ public class MainController implements Initializable, BookReturnCallback {
         enableDisableGraph(false);
 
         String id = memberIDInput.getText();
-        String qu = "SELECT * FROM MEMBER WHERE id = '" + id + "'";
-        ResultSet rs = databaseHandler.execQuery(qu);
+        ResultSet rs = databaseHandler.execQuery(getMemberById(id));
         boolean flag = false;
         try {
             while (rs.next()) {
@@ -231,10 +232,8 @@ public class MainController implements Initializable, BookReturnCallback {
 
         JFXButton yesButton = new JFXButton("YES");
         yesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event1) -> {
-            String str = "INSERT INTO ISSUE(memberID,bookID) VALUES ("
-                    + "'" + memberID + "',"
-                    + "'" + bookID + "')";
-            String str2 = "UPDATE BOOK SET isAvail = false WHERE id = '" + bookID + "'";
+            String str = insertIssue(memberID, bookID);
+            String str2 = setBookAvailability(bookID, false);
             System.out.println(str + " and " + str2);
 
             if (databaseHandler.execAction(str) && databaseHandler.execAction(str2)) {
@@ -265,15 +264,7 @@ public class MainController implements Initializable, BookReturnCallback {
 
         try {
             String id = bookID.getText();
-            String myQuery = "SELECT ISSUE.bookID, ISSUE.memberID, ISSUE.issueTime, ISSUE.renew_count,\n"
-                    + "MEMBER.name, MEMBER.mobile, MEMBER.email,\n"
-                    + "BOOK.title, BOOK.author, BOOK.publisher\n"
-                    + "FROM ISSUE\n"
-                    + "LEFT JOIN MEMBER\n"
-                    + "ON ISSUE.memberID=MEMBER.ID\n"
-                    + "LEFT JOIN BOOK\n"
-                    + "ON ISSUE.bookID=BOOK.ID\n"
-                    + "WHERE ISSUE.bookID='" + id + "'";
+            String myQuery = getIssueByBookId(id);
             ResultSet rs = databaseHandler.execQuery(myQuery);
             if (rs.next()) {
                 memberNameHolder.setText(rs.getString("name"));
@@ -322,8 +313,8 @@ public class MainController implements Initializable, BookReturnCallback {
         JFXButton yesButton = new JFXButton("YES, Please");
         yesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent ev) -> {
             String id = bookID.getText();
-            String ac1 = "DELETE FROM ISSUE WHERE BOOKID = '" + id + "'";
-            String ac2 = "UPDATE BOOK SET ISAVAIL = TRUE WHERE ID = '" + id + "'";
+            String ac1 = deleteIssueById(id);
+            String ac2 = setBookAvailability(id, true);
 
             if (databaseHandler.execAction(ac1) && databaseHandler.execAction(ac2)) {
                 JFXButton btn = new JFXButton("Done!");
@@ -354,7 +345,7 @@ public class MainController implements Initializable, BookReturnCallback {
         }
         JFXButton yesButton = new JFXButton("YES, Please");
         yesButton.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent event1) -> {
-            String ac = "UPDATE ISSUE SET issueTime = CURRENT_TIMESTAMP, renew_count = renew_count+1 WHERE BOOKID = '" + bookID.getText() + "'";
+            String ac = updateIssue(bookID.getText());
             System.out.println(ac);
             if (databaseHandler.execAction(ac)) {
                 JFXButton btn = new JFXButton("Alright!");

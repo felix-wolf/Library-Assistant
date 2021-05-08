@@ -7,6 +7,8 @@ import library.assistant.ui.listbook.BookListController;
 import library.assistant.ui.listmember.MemberListController;
 import org.junit.Test;
 
+import static library.assistant.database.SQLStatements.insertIssue;
+import static library.assistant.database.SQLStatements.setBookAvailability;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -32,8 +34,8 @@ public class IssueTest {
         DataHelper.insertNewBook(bookModel);
         DataHelper.insertNewMember(member);
         assertFalse(DatabaseHandler.getInstance().isBookAlreadyIssued(bookControllerModel));
-        assertTrue(DatabaseHandler.getInstance().execAction("UPDATE BOOK SET isAvail = false WHERE id = '" + id + "'"));
-        assertTrue(DatabaseHandler.getInstance().execAction("INSERT INTO ISSUE(memberID,bookID) VALUES ('" + id + "', '" + id + "')"));
+        assertTrue(DatabaseHandler.getInstance().execAction(setBookAvailability(id, false)));
+        assertTrue(DatabaseHandler.getInstance().execAction(insertIssue(id, id)));
         assertTrue(DatabaseHandler.getInstance().isBookAlreadyIssued(bookControllerModel));
         assertTrue(DatabaseHandler.getInstance().isMemberHasAnyBooks(member));
     }
