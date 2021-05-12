@@ -67,7 +67,7 @@ public class BookListController implements Initializable {
         idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         authorCol.setCellValueFactory(new PropertyValueFactory<>("author"));
         publisherCol.setCellValueFactory(new PropertyValueFactory<>("publisher"));
-        availabilityCol.setCellValueFactory(new PropertyValueFactory<>("availabilty"));
+        availabilityCol.setCellValueFactory(new PropertyValueFactory<>("availability"));
     }
 
     private void loadData() {
