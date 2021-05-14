@@ -242,7 +242,7 @@ public final class DatabaseHandler {
         return false;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         DatabaseHandler.getInstance();
     }
 
