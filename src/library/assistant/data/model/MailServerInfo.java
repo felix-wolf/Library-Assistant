@@ -1,5 +1,7 @@
 package library.assistant.data.model;
 
+import java.util.Objects;
+
 /**
  * @author afsal
  */
@@ -47,5 +49,18 @@ public class MailServerInfo {
     public boolean validate() {
         boolean flag = mailServer == null || mailServer.isEmpty() || port == null || emailID == null || emailID.isEmpty() || password.isEmpty();
         return !flag;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MailServerInfo that = (MailServerInfo) o;
+        return Objects.equals(mailServer, that.mailServer) && Objects.equals(port, that.port) && Objects.equals(emailID, that.emailID) && Objects.equals(password, that.password) && Objects.equals(sslEnabled, that.sslEnabled);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(mailServer, port, emailID, password, sslEnabled);
     }
 }
