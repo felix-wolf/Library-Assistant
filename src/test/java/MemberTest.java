@@ -23,7 +23,7 @@ public class MemberTest {
     }
 
     @Test
-    public void addMemberTest() {
+    public void insertMemberTest() {
         assertTrue(DataHelper.insertNewMember(member));
         assertTrue(DataHelper.isMemberExists(id));
     }

@@ -30,7 +30,7 @@ public class IssueTest {
      * had to write plain sql statements as this is what is done in the actual controller
      */
     @Test
-    public void bookIssueTest() {
+    public void insertIssueTest() {
         DataHelper.insertNewBook(bookModel);
         DataHelper.insertNewMember(member);
         assertFalse(DatabaseHandler.getInstance().isBookAlreadyIssued(bookControllerModel));

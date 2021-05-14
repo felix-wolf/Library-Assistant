@@ -23,7 +23,7 @@ public class BookTest {
     }
 
     @Test
-    public void addBookTest() {
+    public void insertBookTest() {
         assertTrue(DataHelper.insertNewBook(bookModel));
     }
 
