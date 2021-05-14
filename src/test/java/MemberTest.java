@@ -3,7 +3,6 @@ package test.java;
 import library.assistant.data.model.Book;
 import library.assistant.database.DataHelper;
 import library.assistant.database.DatabaseHandler;
-import library.assistant.ui.listbook.BookListController;
 import library.assistant.ui.listmember.MemberListController;
 import org.junit.Test;
 

@@ -6,11 +6,8 @@ import library.assistant.database.DatabaseHandler;
 import library.assistant.ui.listbook.BookListController;
 import org.junit.Test;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import static library.assistant.database.SQLStatements.setBookAvailability;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class BookTest {
     // generic book id
