@@ -13,6 +13,9 @@ public class MemberTest {
     final String id = "134565432135";
     final MemberListController.Member member = new MemberListController.Member("", id, "", "");
 
+    /**
+     * wipes the database before a new test run
+     */
     public MemberTest() {
         // WIPE DATABASE
         DataHelper.wipeTable("Issue");
@@ -20,7 +23,9 @@ public class MemberTest {
         DataHelper.wipeTable("Book");
         System.out.println("Test Database wiped");
     }
-
+    /**
+     * tests member insertion
+     */
     @Test
     public void insertMemberTest() {
         assertTrue(DataHelper.insertNewMember(member));
@@ -28,7 +33,7 @@ public class MemberTest {
     }
 
     /**
-     * Test member exists function
+     * tests member exists function
      */
     @Test
     public void memberDoesExistTest() {
@@ -37,7 +42,7 @@ public class MemberTest {
     }
 
     /**
-     * Test member deletion
+     * tests member deletion
      */
     @Test
     public void deleteMemberTest() {
@@ -46,7 +51,7 @@ public class MemberTest {
     }
 
     /**
-     * test if a member has books
+     * tests if a member has books
      */
     @Test
     public void memberBooksTest() {
