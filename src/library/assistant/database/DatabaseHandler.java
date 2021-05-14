@@ -143,9 +143,8 @@ public final class DatabaseHandler {
 
     public boolean deleteBook(Book book) {
         try {
-            String deleteStatement = "DELETE FROM BOOK WHERE ID = ?";
+            String deleteStatement = SQLStatements.deleteBookById(book.getId());
             PreparedStatement stmt = conn.prepareStatement(deleteStatement);
-            stmt.setString(1, book.getId());
             int res = stmt.executeUpdate();
             if (res == 1) {
                 return true;
