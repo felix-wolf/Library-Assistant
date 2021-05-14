@@ -1,21 +1,10 @@
 package library.assistant.ui.issuedlist;
 
-import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -25,16 +14,22 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import library.assistant.database.DatabaseHandler;
-import library.assistant.ui.settings.Preferences;
 import library.assistant.ui.callback.BookReturnCallback;
 import library.assistant.util.LibraryAssistantUtil;
+
+import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /*
  * @author afsal villan
  */
 public class IssuedListController implements Initializable {
 
-    private ObservableList<IssueInfo> list = FXCollections.observableArrayList();
+    private final ObservableList<IssueInfo> list = FXCollections.observableArrayList();
     private BookReturnCallback callback;
 
     @FXML
@@ -88,7 +83,6 @@ public class IssuedListController implements Initializable {
                 + "LEFT OUTER JOIN BOOK\n"
                 + "ON BOOK.id = ISSUE.bookID";
         ResultSet rs = handler.execQuery(qu);
-        Preferences pref = Preferences.getPreferences();
         try {
             int counter = 0;
             while (rs.next()) {
@@ -98,7 +92,7 @@ public class IssuedListController implements Initializable {
                 String bookTitle = rs.getString("title");
                 Timestamp issueTime = rs.getTimestamp("issueTime");
                 System.out.println("Issued on " + issueTime);
-                Integer days = Math.toIntExact(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - issueTime.getTime())) + 1;
+                int days = Math.toIntExact(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - issueTime.getTime())) + 1;
                 Float fine = LibraryAssistantUtil.getFineAmount(days);
                 IssueInfo issueInfo = new IssueInfo(counter, bookID, bookTitle, memberName, LibraryAssistantUtil.formatDateTimeString(new Date(issueTime.getTime())), days, fine);
                 list.add(issueInfo);
@@ -109,12 +103,12 @@ public class IssuedListController implements Initializable {
     }
 
     @FXML
-    private void handleRefresh(ActionEvent event) {
+    private void handleRefresh() {
         loadData();
     }
 
     @FXML
-    private void exportAsPDF(ActionEvent event) {
+    private void exportAsPDF() {
         List<List> printData = new ArrayList<>();
         String[] headers = {"SI", "BOOK ID", "      BOOK NAME       ", "    HOLDER NAME     ", "ISSUE DATE", "DAYS ELAPSED", "FINE"};
         printData.add(Arrays.asList(headers));
@@ -133,7 +127,7 @@ public class IssuedListController implements Initializable {
     }
 
     @FXML
-    private void closeStage(ActionEvent event) {
+    private void closeStage() {
         getStage().close();
     }
 
@@ -142,7 +136,7 @@ public class IssuedListController implements Initializable {
     }
 
     @FXML
-    private void handleReturn(ActionEvent event) {
+    private void handleReturn() {
         IssueInfo issueInfo = tableView.getSelectionModel().getSelectedItem();
         if (issueInfo != null) {
             callback.loadBookReturn(issueInfo.getBookID());

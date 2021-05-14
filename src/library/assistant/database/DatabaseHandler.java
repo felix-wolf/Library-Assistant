@@ -1,22 +1,8 @@
 package library.assistant.database;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
-import javax.swing.JOptionPane;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import library.assistant.ui.listbook.BookListController.Book;
 import library.assistant.ui.listmember.MemberListController;
 import org.apache.logging.log4j.Level;
@@ -27,6 +13,15 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.swing.*;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public final class DatabaseHandler {
 
     private final static Logger LOGGER = LogManager.getLogger(DatabaseHandler.class.getName());
@@ -34,6 +29,7 @@ public final class DatabaseHandler {
     private static DatabaseHandler handler = null;
 
     private static final String DB_URL = "jdbc:derby:database;create=true";
+    private static final String TEST_DB_URL = "jdbc:derby:database_test;create=true";
     private static Connection conn = null;
     private static Statement stmt = null;
 
@@ -52,6 +48,17 @@ public final class DatabaseHandler {
         return handler;
     }
 
+    public static boolean isJUnitTest() {
+        for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+            if (element.getClassName().startsWith("org.junit.")) {
+                System.out.println("is junit test: TRUE");
+                return true;
+            }
+        }
+        System.out.println("is junit test: FALSE");
+        return false;
+    }
+
     private static void inflateDB() {
         List<String> tableData = new ArrayList<>();
         try {
@@ -59,7 +66,7 @@ public final class DatabaseHandler {
             System.out.println("Already loaded tables " + loadedTables);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-            Document doc = dBuilder.parse(DatabaseHandler.class.getClass().getResourceAsStream("/resources/database/tables.xml"));
+            Document doc = dBuilder.parse(DatabaseHandler.class.getResourceAsStream("/resources/database/tables.xml"));
             NodeList nList = doc.getElementsByTagName("table-entry");
             for (int i = 0; i < nList.getLength(); i++) {
                 Node nNode = nList.item(i);
@@ -79,30 +86,30 @@ public final class DatabaseHandler {
             }
         }
         catch (Exception ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
     }
 
     private static void createConnection() {
         try {
             Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
-            conn = DriverManager.getConnection(DB_URL);
-        }
-        catch (Exception e) {
+            conn = DriverManager.getConnection(isJUnitTest() ? TEST_DB_URL : DB_URL);
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Cant load database", "Database Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
+
     }
 
     private static Set<String> getDBTables() throws SQLException {
         Set<String> set = new HashSet<>();
         DatabaseMetaData dbmeta = conn.getMetaData();
-        readDBTable(set, dbmeta, "TABLE", null);
+        readDBTable(set, dbmeta);
         return set;
     }
 
-    private static void readDBTable(Set<String> set, DatabaseMetaData dbmeta, String searchCriteria, String schema) throws SQLException {
-        ResultSet rs = dbmeta.getTables(null, schema, null, new String[]{searchCriteria});
+    private static void readDBTable(Set<String> set, DatabaseMetaData dbmeta) throws SQLException {
+        ResultSet rs = dbmeta.getTables(null, null, null, new String[]{"TABLE"});
         while (rs.next()) {
             set.add(rs.getString("TABLE_NAME").toLowerCase());
         }
@@ -118,8 +125,6 @@ public final class DatabaseHandler {
             System.out.println("Exception at execQuery:dataHandler" + ex.getLocalizedMessage());
             return null;
         }
-        finally {
-        }
         return result;
     }
 
@@ -134,22 +139,19 @@ public final class DatabaseHandler {
             System.out.println("Exception at execQuery:dataHandler" + ex.getLocalizedMessage());
             return false;
         }
-        finally {
-        }
     }
 
     public boolean deleteBook(Book book) {
         try {
-            String deleteStatement = "DELETE FROM BOOK WHERE ID = ?";
+            String deleteStatement = SQLStatements.deleteBookById(book.getId());
             PreparedStatement stmt = conn.prepareStatement(deleteStatement);
-            stmt.setString(1, book.getId());
             int res = stmt.executeUpdate();
             if (res == 1) {
                 return true;
             }
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -167,7 +169,7 @@ public final class DatabaseHandler {
             }
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -183,7 +185,7 @@ public final class DatabaseHandler {
             }
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -201,7 +203,7 @@ public final class DatabaseHandler {
             }
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -218,7 +220,7 @@ public final class DatabaseHandler {
             return (res > 0);
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
@@ -235,12 +237,12 @@ public final class DatabaseHandler {
             return (res > 0);
         }
         catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
         return false;
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         DatabaseHandler.getInstance();
     }
 

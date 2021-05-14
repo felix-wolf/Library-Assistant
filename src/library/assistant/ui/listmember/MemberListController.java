@@ -1,20 +1,8 @@
 package library.assistant.ui.listmember;
 
-import java.io.IOException;
-import java.net.URL;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -36,9 +24,17 @@ import library.assistant.ui.addmember.MemberAddController;
 import library.assistant.ui.main.MainController;
 import library.assistant.util.LibraryAssistantUtil;
 
+import java.io.IOException;
+import java.net.URL;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class MemberListController implements Initializable {
 
-    ObservableList<Member> list = FXCollections.observableArrayList();
+    final ObservableList<Member> list = FXCollections.observableArrayList();
 
     @FXML
     private TableView<Member> tableView;
@@ -89,14 +85,14 @@ public class MemberListController implements Initializable {
 
             }
         } catch (SQLException ex) {
-            Logger.getLogger(BookAddController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BookAddController.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
 
         tableView.setItems(list);
     }
 
     @FXML
-    private void handleMemberDelete(ActionEvent event) {
+    private void handleMemberDelete() {
         //Fetch the selected row
         MemberListController.Member selectedForDeletion = tableView.getSelectionModel().getSelectedItem();
         if (selectedForDeletion == null) {
@@ -112,7 +108,7 @@ public class MemberListController implements Initializable {
         alert.setContentText("Are you sure want to delete " + selectedForDeletion.getName() + " ?");
         Optional<ButtonType> answer = alert.showAndWait();
         if (answer.get() == ButtonType.OK) {
-            Boolean result = DatabaseHandler.getInstance().deleteMember(selectedForDeletion);
+            boolean result = DatabaseHandler.getInstance().deleteMember(selectedForDeletion);
             if (result) {
                 AlertMaker.showSimpleAlert("Book deleted", selectedForDeletion.getName() + " was deleted successfully.");
                 list.remove(selectedForDeletion);
@@ -125,12 +121,12 @@ public class MemberListController implements Initializable {
     }
 
     @FXML
-    private void handleRefresh(ActionEvent event) {
+    private void handleRefresh() {
         loadData();
     }
 
     @FXML
-    private void handleMemberEdit(ActionEvent event) {
+    private void handleMemberEdit() {
         //Fetch the selected row
         Member selectedForEdit = tableView.getSelectionModel().getSelectedItem();
         if (selectedForEdit == null) {
@@ -141,7 +137,7 @@ public class MemberListController implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/library/assistant/ui/addmember/member_add.fxml"));
             Parent parent = loader.load();
 
-            MemberAddController controller = (MemberAddController) loader.getController();
+            MemberAddController controller = loader.getController();
             controller.infalteUI(selectedForEdit);
 
             Stage stage = new Stage(StageStyle.DECORATED);
@@ -150,17 +146,15 @@ public class MemberListController implements Initializable {
             stage.show();
             LibraryAssistantUtil.setStageIcon(stage);
 
-            stage.setOnHiding((e) -> {
-                handleRefresh(new ActionEvent());
-            });
+            stage.setOnHiding((e) -> handleRefresh());
 
         } catch (IOException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
     }
 
     @FXML
-    private void exportAsPDF(ActionEvent event) {
+    private void exportAsPDF() {
         List<List> printData = new ArrayList<>();
         String[] headers = {"   Name    ", "ID", "Mobile", "    Email   "};
         printData.add(Arrays.asList(headers));
@@ -176,7 +170,7 @@ public class MemberListController implements Initializable {
     }
 
     @FXML
-    private void closeStage(ActionEvent event) {
+    private void closeStage() {
         getStage().close();
     }
 

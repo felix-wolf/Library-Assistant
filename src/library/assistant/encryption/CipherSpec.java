@@ -1,6 +1,7 @@
 package library.assistant.encryption;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * @author Villan
@@ -29,7 +30,7 @@ public class CipherSpec implements Serializable {
 
     @Override
     public String toString() {
-        return "CipherSpec{" + "key=" + key + ", iv=" + iv + '}';
+        return "CipherSpec{" + "key=" + Arrays.toString(key) + ", iv=" + Arrays.toString(iv) + '}';
     }
     
 }

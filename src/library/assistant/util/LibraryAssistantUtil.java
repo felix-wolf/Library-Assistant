@@ -44,7 +44,7 @@ public class LibraryAssistantUtil {
             FXMLLoader loader = new FXMLLoader(loc);
             Parent parent = loader.load();
             controller = loader.getController();
-            Stage stage = null;
+            Stage stage;
             if (parentStage != null) {
                 stage = parentStage;
             } else {
@@ -55,15 +55,15 @@ public class LibraryAssistantUtil {
             stage.show();
             setStageIcon(stage);
         } catch (IOException ex) {
-            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainController.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
         return controller;
     }
 
     public static Float getFineAmount(int totalDays) {
         Preferences pref = Preferences.getPreferences();
-        Integer fineDays = totalDays - pref.getnDaysWithoutFine();
-        Float fine = 0f;
+        int fineDays = totalDays - pref.getnDaysWithoutFine();
+        float fine = 0f;
         if (fineDays > 0) {
             fine = fineDays * pref.getFinePerDay();
         }
@@ -117,7 +117,7 @@ public class LibraryAssistantUtil {
             Desktop desktop = Desktop.getDesktop();
             desktop.open(file);
         } catch (IOException ex) {
-            Logger.getLogger(LibraryAssistantUtil.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LibraryAssistantUtil.class.getName()).log(Level.SEVERE, null, ex.toString());
         }
     }
 }

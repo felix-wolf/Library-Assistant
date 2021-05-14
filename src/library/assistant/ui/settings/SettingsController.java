@@ -4,11 +4,6 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXSpinner;
 import com.jfoenix.controls.JFXTextField;
-import java.io.File;
-import java.net.URL;
-import java.security.InvalidParameterException;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.DirectoryChooser;
@@ -23,6 +18,11 @@ import library.assistant.util.LibraryAssistantUtil;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.File;
+import java.net.URL;
+import java.security.InvalidParameterException;
+import java.util.ResourceBundle;
 
 public class SettingsController implements Initializable {
 
@@ -55,7 +55,7 @@ public class SettingsController implements Initializable {
     }
 
     @FXML
-    private void handleSaveButtonAction(ActionEvent event) {
+    private void handleSaveButtonAction() {
         int ndays = Integer.parseInt(nDaysWithoutFine.getText());
         float fine = Float.parseFloat(finePerDay.getText());
         String uname = username.getText();
@@ -85,7 +85,7 @@ public class SettingsController implements Initializable {
     }
 
     @FXML
-    private void handleTestMailAction(ActionEvent event) {
+    private void handleTestMailAction() {
         MailServerInfo mailServerInfo = readMailSererInfo();
         if (mailServerInfo != null) {
             TestMailController controller = (TestMailController) LibraryAssistantUtil.loadWindow(getClass().getResource("/library/assistant/ui/mail/test_mail.fxml"), "Test Email", null);
@@ -94,7 +94,7 @@ public class SettingsController implements Initializable {
     }
 
     @FXML
-    private void saveMailServerConfuration(ActionEvent event) {
+    private void saveMailServerConfiguration() {
         MailServerInfo mailServerInfo = readMailSererInfo();
         if (mailServerInfo != null) {
             if (DataHelper.updateMailServerInfo(mailServerInfo)) {
@@ -133,7 +133,7 @@ public class SettingsController implements Initializable {
     }
 
     @FXML
-    private void handleDatabaseExportAction(ActionEvent event) {
+    private void handleDatabaseExportAction() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Select Location to Create Backup");
         File selectedDirectory = directoryChooser.showDialog(getStage());

@@ -2,10 +2,6 @@ package library.assistant.ui.login;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -20,6 +16,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
 
@@ -38,9 +38,9 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void handleLoginButtonAction(ActionEvent event) {
+    private void handleLoginButtonAction() {
         String uname = StringUtils.trimToEmpty(username.getText());
-        String pword = DigestUtils.shaHex(password.getText());
+        String pword = DigestUtils.sha1Hex(password.getText());
 
         if (uname.equals(preference.getUsername()) && pword.equals(preference.getPassword())) {
             closeStage();
@@ -54,7 +54,7 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void handleCancelButtonAction(ActionEvent event) {
+    private void handleCancelButtonAction() {
         System.exit(0);
     }
 
@@ -72,7 +72,7 @@ public class LoginController implements Initializable {
             LibraryAssistantUtil.setStageIcon(stage);
         }
         catch (IOException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex);
+            LOGGER.log(Level.ERROR, "{}", ex.toString());
         }
     }
 

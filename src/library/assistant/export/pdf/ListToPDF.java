@@ -18,7 +18,7 @@ public class ListToPDF {
 
     public enum Orientation {
         PORTRAIT, LANDSCAPE
-    };
+    }
 
     public boolean doPrintToPdf(List<List> list, File saveLoc, Orientation orientation) {
         try {
@@ -43,10 +43,9 @@ public class ListToPDF {
             float margin = 10;
             float tableWidth = page.getMediaBox().getWidth() - (2 * margin);
             float yStartNewPage = page.getMediaBox().getHeight() - (2 * margin);
-            float yStart = yStartNewPage;
             float bottomMargin = 0;
 
-            BaseTable dataTable = new BaseTable(yStart, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, true,
+            BaseTable dataTable = new BaseTable(yStartNewPage, yStartNewPage, bottomMargin, tableWidth, margin, doc, page, true,
                     true);
             DataTable t = new DataTable(dataTable, page);
             t.addListToTable(list, DataTable.HASHEADER);
