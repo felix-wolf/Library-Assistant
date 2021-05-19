@@ -82,6 +82,7 @@ public final class DatabaseHandler {
             }
             else {
                 System.out.println("Inflating new tables.");
+                tableData.addAll(SQLStatements.getTrigger());
                 createTables(tableData);
             }
         }
