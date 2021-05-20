@@ -28,8 +28,10 @@ public final class DatabaseHandler {
 
     private static DatabaseHandler handler = null;
 
-    private static final String DB_URL = "jdbc:derby://localhost:1527/database;create=true";
-    private static final String TEST_DB_URL = "jdbc:derby://localhost:1527/database_test;create=true";
+    private static final String DB_URL_LIVE = "jdbc:derby://localhost:1527/database;create=true";
+    private static final String DB_URL_TEST = "jdbc:derby://localhost:1527/database_test;create=true";
+    private static final String DRIVER_LIVE = "net.sf.log4jdbc.DriverSpy";
+    private static final String DRIVER_TEST = "org.apache.derby.jdbc.EmbeddedDriver";
     private static Connection conn = null;
     private static Statement stmt = null;
 
@@ -93,8 +95,8 @@ public final class DatabaseHandler {
 
     private static void createConnection() {
         try {
-            Class.forName("org.apache.derby.jdbc.EmbeddedDriver").newInstance();
-            conn = DriverManager.getConnection(isJUnitTest() ? TEST_DB_URL : DB_URL);
+            Class.forName(isJUnitTest() ? DRIVER_TEST : DRIVER_LIVE).newInstance();
+            conn = DriverManager.getConnection(isJUnitTest() ? DB_URL_TEST : DB_URL_LIVE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Cant load database", "Database Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
