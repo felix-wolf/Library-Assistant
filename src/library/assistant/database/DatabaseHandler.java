@@ -28,8 +28,8 @@ public final class DatabaseHandler {
 
     private static DatabaseHandler handler = null;
 
-    private static final String DB_URL = "jdbc:derby:database;create=true";
-    private static final String TEST_DB_URL = "jdbc:derby:database_test;create=true";
+    private static final String DB_URL = "jdbc:derby://localhost:1527/database;create=true";
+    private static final String TEST_DB_URL = "jdbc:derby://localhost:1527/database_test;create=true";
     private static Connection conn = null;
     private static Statement stmt = null;
 
