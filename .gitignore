@@ -2,6 +2,7 @@
 /dist/
 /database/
 /database_test/
+/consumerDatabase/
 /derby.log
 /logs/
 /config.txt
