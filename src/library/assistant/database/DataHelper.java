@@ -109,7 +109,7 @@ public class DataHelper {
         try {
             wipeTable("MAIL_SERVER_INFO");
             PreparedStatement statement = DatabaseHandler.getInstance().getConnection().prepareStatement(
-                    "INSERT INTO MAIL_SERVER_INFO(server_name,server_port,user_email,user_password,ssl_enabled) VALUES(?,?,?,?,?)");
+                    SQLStatements.insertMailServerInfo());
             statement.setString(1, mailServerInfo.getMailServer());
             statement.setInt(2, mailServerInfo.getPort());
             statement.setString(3, mailServerInfo.getEmailID());

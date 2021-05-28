@@ -161,7 +161,7 @@ public final class DatabaseHandler {
 
     public boolean isBookAlreadyIssued(Book book) {
         try {
-            String checkstmt = "SELECT COUNT(*) FROM ISSUE WHERE bookid=?";
+            String checkstmt = "SELECT COUNT(*) FROM ISSUE WHERE bookID=?";
             PreparedStatement stmt = conn.prepareStatement(checkstmt);
             stmt.setString(1, book.getId());
             ResultSet rs = stmt.executeQuery();
@@ -179,7 +179,7 @@ public final class DatabaseHandler {
 
     public boolean deleteMember(MemberListController.Member member) {
         try {
-            String deleteStatement = "DELETE FROM MEMBER WHERE id = ?";
+            String deleteStatement = "DELETE FROM MEMBER WHERE ID=?";
             PreparedStatement stmt = conn.prepareStatement(deleteStatement);
             stmt.setString(1, member.getId());
             int res = stmt.executeUpdate();

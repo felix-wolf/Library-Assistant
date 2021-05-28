@@ -18,7 +18,7 @@ public class SQLStatements {
      * @return the sql statement as a string
      */
     public static String getMemberById(String memberId) {
-        return "SELECT * FROM MEMBER WHERE id = '" + memberId + "'";
+        return "SELECT * FROM MEMBER WHERE id='" + memberId + "'";
     }
 
     /**
@@ -28,7 +28,7 @@ public class SQLStatements {
      * @return the sql statement as a string
      */
     public static String insertIssue(String memberId, String bookId) {
-        return "INSERT INTO ISSUE(memberID,bookID) VALUES ('" + memberId + "', '" + bookId + "')";
+        return "INSERT INTO ISSUE(memberID,bookID) VALUES('" + memberId + "','" + bookId + "')";
     }
 
     /**
@@ -38,7 +38,7 @@ public class SQLStatements {
      * @return the sql statement as a string
      */
     public static String updateIssue(String bookId) {
-        return "UPDATE ISSUE SET issueTime = CURRENT_TIMESTAMP, renew_count = renew_count+1 WHERE BOOKID = '" + bookId + "'";
+        return "UPDATE ISSUE SET issueTime=CURRENT_TIMESTAMP, renew_count=renew_count+1 WHERE BOOKID='" + bookId + "'";
     }
 
     /**
@@ -47,7 +47,7 @@ public class SQLStatements {
      * @return the sql statement as a string
      */
     public static String deleteBookById(String bookId) {
-        return "DELETE FROM BOOK WHERE ID = '" + bookId + "'";
+        return "DELETE FROM BOOK WHERE ID='" + bookId + "'";
     }
 
     /**
@@ -57,7 +57,7 @@ public class SQLStatements {
      * @return the sql statement as a string
      */
     public static String setBookAvailability(String bookId, boolean isAvailable) {
-        return "UPDATE BOOK SET isAvail = " + isAvailable + " WHERE id = '" + bookId + "'";
+        return "UPDATE BOOK SET isAvail=" + isAvailable + " WHERE ID='" + bookId + "'";
     }
 
     /**
@@ -66,7 +66,7 @@ public class SQLStatements {
      * @return the sql statement as a string
      */
     public static String deleteIssueById(String bookId) {
-        return "DELETE FROM ISSUE WHERE BOOKID = '" + bookId + "'";
+        return "DELETE FROM ISSUE WHERE BOOKID='" + bookId + "'";
     }
 
     /**
@@ -83,7 +83,11 @@ public class SQLStatements {
                 + "ON ISSUE.memberID=MEMBER.ID\n"
                 + "LEFT JOIN BOOK\n"
                 + "ON ISSUE.bookID=BOOK.ID\n"
-                + "WHERE ISSUE.bookID='" + bookId + "'";
+                + "WHERE ISSUE.bookID = '" + bookId + "'";
+    }
+
+    public static String insertMailServerInfo() {
+        return "INSERT INTO MAIL_SERVER_INFO(server_name, server_port, user_email, user_password, ssl_enabled)VALUES(?,?,?,?,?)";
     }
 
     public static String getBookTrigger() {
@@ -124,7 +128,7 @@ public class SQLStatements {
     }
 
     public static ArrayList<String> getTrigger() {
-        ArrayList<String> arr = new ArrayList();
+        ArrayList<String> arr = new ArrayList<>();
         arr.add(getMemberTrigger());
         arr.add(getBookTrigger());
         arr.add(getIssueTrigger());
