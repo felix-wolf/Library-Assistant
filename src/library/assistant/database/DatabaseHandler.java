@@ -28,7 +28,8 @@ public final class DatabaseHandler {
 
     private static DatabaseHandler handler = null;
 
-    private static final String DB_URL_LIVE = "jdbc:log4jdbc:derby://localhost:1527/database;create=true";
+    //private static final String DB_URL_LIVE = "jdbc:log4jdbc:derby://localhost:1527/database;create=true";
+    private static final String DB_URL_LIVE = "jdbc:derby://localhost:1527/database;create=true";
     private static final String DB_URL_TEST = "jdbc:derby://localhost:1527/database_test;create=true";
     private static final String DRIVER_LIVE = "net.sf.log4jdbc.DriverSpy";
     private static final String DRIVER_TEST = "org.apache.derby.jdbc.EmbeddedDriver";
@@ -101,7 +102,6 @@ public final class DatabaseHandler {
             JOptionPane.showMessageDialog(null, "Cant load database", "Database Error", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
-
     }
 
     private static Set<String> getDBTables() throws SQLException {
