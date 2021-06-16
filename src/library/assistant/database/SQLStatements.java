@@ -124,7 +124,7 @@ public class SQLStatements {
     }
 
     public static ArrayList<String> getTrigger() {
-        ArrayList<String> arr = new ArrayList();
+        ArrayList<String> arr = new ArrayList<>();
         arr.add(getMemberTrigger());
         arr.add(getBookTrigger());
         arr.add(getIssueTrigger());
