@@ -1,5 +1,6 @@
 /build/
 /dist/
+/consumerDatabase/
 /database/
 /database_test/
 /derby.log
