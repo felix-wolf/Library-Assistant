@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import library.assistant.alert.AlertMaker;
 import library.assistant.database.DatabaseHandler;
+import library.assistant.database.SQLStatements;
 import library.assistant.ui.addbook.BookAddController;
 import library.assistant.ui.main.MainController;
 import library.assistant.util.LibraryAssistantUtil;
@@ -74,7 +75,7 @@ public class BookListController implements Initializable {
         list.clear();
 
         DatabaseHandler handler = DatabaseHandler.getInstance();
-        String qu = "SELECT * FROM BOOK";
+        String qu = SQLStatements.getAllFromBooks();
         ResultSet rs = handler.execQuery(qu);
         try {
             while (rs.next()) {
@@ -114,10 +115,10 @@ public class BookListController implements Initializable {
             boolean result = DatabaseHandler.getInstance().deleteBook(selectedForDeletion);
             if (result) {
                 AlertMaker.showSimpleAlert("Book deleted", selectedForDeletion.getTitle() + " was deleted successfully.");
-                list.remove(selectedForDeletion);
             } else {
                 AlertMaker.showSimpleAlert("Failed", selectedForDeletion.getTitle() + " could not be deleted");
             }
+            loadData();
         } else {
             AlertMaker.showSimpleAlert("Deletion cancelled", "Deletion process cancelled");
         }
