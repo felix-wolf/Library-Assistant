@@ -74,7 +74,7 @@ public class SQLStatements {
      * @return the sql statement as a string
      */
     public static String getMemberById(String memberId) {
-        return "SELECT * FROM MEMBER WHERE id = '" + memberId + "'";
+        return "SELECT * FROM MEMBER WHERE id = '" + memberId + "' AND is_deleted = false";
     }
 
     /**
@@ -146,10 +146,8 @@ public class SQLStatements {
      * @return the sql statement as a string
      */
     public static String bookIsAlreadyIssued() {
-        return "SELECT COUNT(*) FROM ISSUE WHERE bookid=?";
+        return "SELECT COUNT(*) FROM ISSUE WHERE bookid=? AND is_deleted = false";
     }
-
-
 
     /**
      * builds the sql statement for deleting an issue by its bookId
@@ -174,7 +172,7 @@ public class SQLStatements {
                 + "ON ISSUE.memberID=MEMBER.ID\n"
                 + "LEFT JOIN BOOK\n"
                 + "ON ISSUE.bookID=BOOK.ID\n"
-                + "WHERE ISSUE.bookID='" + bookId + "'";
+                + "WHERE ISSUE.bookID='" + bookId + "' AND ISSUE.is_deleted = false";
     }
 
     public static String getBookTrigger() {
