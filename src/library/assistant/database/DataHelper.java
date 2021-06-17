@@ -107,7 +107,9 @@ public class DataHelper {
 
     public static boolean updateMailServerInfo(MailServerInfo mailServerInfo) {
         try {
-            wipeTable("MAIL_SERVER_INFO");
+            String deleteStatement = "UPDATE MAIL_SERVER_INFO SET is_deleted = true WHERE server_name = '" + mailServerInfo.getMailServer() + "'";
+            DatabaseHandler.getInstance().execAction(deleteStatement);
+
             PreparedStatement statement = DatabaseHandler.getInstance().getConnection().prepareStatement(
                     "INSERT INTO MAIL_SERVER_INFO(server_name,server_port,user_email,user_password,ssl_enabled) VALUES(?,?,?,?,?)");
             statement.setString(1, mailServerInfo.getMailServer());
