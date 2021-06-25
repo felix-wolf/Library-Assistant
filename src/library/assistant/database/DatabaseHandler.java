@@ -84,7 +84,6 @@ public final class DatabaseHandler {
             }
             else {
                 System.out.println("Inflating new tables.");
-                tableData.addAll(SQLStatements.getTrigger());
                 createTables(tableData);
             }
         }
@@ -161,7 +160,7 @@ public final class DatabaseHandler {
 
     public boolean isBookAlreadyIssued(Book book) {
         try {
-            String checkstmt = "SELECT COUNT(*) FROM ISSUE WHERE bookID=?";
+            String checkstmt = SQLStatements.bookIsAlreadyIssued();
             PreparedStatement stmt = conn.prepareStatement(checkstmt);
             stmt.setString(1, book.getId());
             ResultSet rs = stmt.executeQuery();
@@ -179,7 +178,7 @@ public final class DatabaseHandler {
 
     public boolean deleteMember(MemberListController.Member member) {
         try {
-            String deleteStatement = "DELETE FROM MEMBER WHERE ID=?";
+            String deleteStatement = SQLStatements.deleteMemberById();
             PreparedStatement stmt = conn.prepareStatement(deleteStatement);
             stmt.setString(1, member.getId());
             int res = stmt.executeUpdate();
@@ -195,7 +194,7 @@ public final class DatabaseHandler {
 
     public boolean isMemberHasAnyBooks(MemberListController.Member member) {
         try {
-            String checkstmt = "SELECT COUNT(*) FROM ISSUE WHERE memberID=?";
+            String checkstmt = SQLStatements.getNumberOfIssuesByMemberId();
             PreparedStatement stmt = conn.prepareStatement(checkstmt);
             stmt.setString(1, member.getId());
             ResultSet rs = stmt.executeQuery();
@@ -213,7 +212,7 @@ public final class DatabaseHandler {
 
     public boolean updateBook(Book book) {
         try {
-            String update = "UPDATE BOOK SET TITLE=?, AUTHOR=?, PUBLISHER=? WHERE ID=?";
+            String update = SQLStatements.updateBook();
             PreparedStatement stmt = conn.prepareStatement(update);
             stmt.setString(1, book.getTitle());
             stmt.setString(2, book.getAuthor());
@@ -230,7 +229,7 @@ public final class DatabaseHandler {
 
     public boolean updateMember(MemberListController.Member member) {
         try {
-            String update = "UPDATE MEMBER SET NAME=?, EMAIL=?, MOBILE=? WHERE ID=?";
+            String update = SQLStatements.updateMember();
             PreparedStatement stmt = conn.prepareStatement(update);
             stmt.setString(1, member.getName());
             stmt.setString(2, member.getEmail());
@@ -252,8 +251,8 @@ public final class DatabaseHandler {
     public ObservableList<PieChart.Data> getBookGraphStatistics() {
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
         try {
-            String qu1 = "SELECT COUNT(*) FROM BOOK";
-            String qu2 = "SELECT COUNT(*) FROM ISSUE";
+            String qu1 = SQLStatements.getNumberOfBooks();
+            String qu2 = SQLStatements.getNumberOfIssues();
             ResultSet rs = execQuery(qu1);
             if (rs.next()) {
                 int count = rs.getInt(1);
@@ -274,8 +273,8 @@ public final class DatabaseHandler {
     public ObservableList<PieChart.Data> getMemberGraphStatistics() {
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
         try {
-            String qu1 = "SELECT COUNT(*) FROM MEMBER";
-            String qu2 = "SELECT COUNT(DISTINCT memberID) FROM ISSUE";
+            String qu1 = SQLStatements.getNumberOfMembers();
+            String qu2 = SQLStatements.getNumberOfDistinctIssuesByMemberId();
             ResultSet rs = execQuery(qu1);
             if (rs.next()) {
                 int count = rs.getInt(1);

@@ -13,6 +13,62 @@ import java.util.ArrayList;
 public class SQLStatements {
 
     /**
+     * builds the sql statement for getting all rows from member table
+     * @return the sql statement as a string
+     */
+    public static String getAllFromMembers() {
+        return "SELECT * FROM MEMBER";
+    }
+
+    /**
+     * builds the sql statement for getting all rows from book table
+     * @return the sql statement as a string
+     */
+    public static String getAllFromBooks() {
+        return "SELECT * FROM BOOK";
+    }
+
+    /**
+     * builds the sql statement for getting the number of existing books
+     * @return the sql statement as a string
+     */
+    public static String getNumberOfBooks() {
+        return "SELECT COUNT(*) FROM BOOK";
+    }
+
+    /**
+     * builds the sql statement for getting the number of existing issues
+     * @return the sql statement as a string
+     */
+    public static String getNumberOfIssues() {
+        return "SELECT COUNT(*) FROM ISSUE";
+    }
+
+    /**
+     * builds the sql statement for getting the number of existing issues with distinct memberIds
+     * @return the sql statement as a string
+     */
+    public static String getNumberOfDistinctIssuesByMemberId() {
+        return "SELECT COUNT(DISTINCT memberID) FROM ISSUE";
+    }
+
+    /**
+     * builds the sql statement for getting the number of existing members
+     * @return the sql statement as a string
+     */
+    public static String getNumberOfMembers() {
+        return "SELECT COUNT(*) FROM MEMBER";
+    }
+
+    /**
+     * builds the sql statement for getting all existing issues by memberId
+     * @return the sql statement as a string
+     */
+    public static String getNumberOfIssuesByMemberId() {
+        return "SELECT COUNT(*) FROM ISSUE WHERE memberID=?";
+    }
+
+    /**
      * builds the sql statement for getting a member by its id
      * @param memberId the id of the member to get
      * @return the sql statement as a string
@@ -42,12 +98,36 @@ public class SQLStatements {
     }
 
     /**
+     * builds the sql statement for updating a member.
+     * @return the sql statement as a string
+     */
+    public static String updateMember() {
+        return "UPDATE MEMBER SET NAME=?, EMAIL=?, MOBILE=? WHERE ID=?";
+    }
+
+    /**
+     * builds the sql statement for updating a book.
+     * @return the sql statement as a string
+     */
+    public static String updateBook() {
+        return "UPDATE BOOK SET TITLE=?, AUTHOR=?, PUBLISHER=? WHERE ID=?";
+    }
+
+    /**
      * builds the sql statement for deleting a book by its id
      * @param bookId the id of the book to be deleted
      * @return the sql statement as a string
      */
     public static String deleteBookById(String bookId) {
         return "DELETE FROM BOOK WHERE ID='" + bookId + "'";
+    }
+
+    /**
+     * builds the sql statement for deleting a member by its id.
+     * @return the sql statement as a string
+     */
+    public static String deleteMemberById() {
+        return "DELETE FROM MEMBER WHERE id = ?";
     }
 
     /**
@@ -59,6 +139,16 @@ public class SQLStatements {
     public static String setBookAvailability(String bookId, boolean isAvailable) {
         return "UPDATE BOOK SET isAvail=" + isAvailable + " WHERE ID='" + bookId + "'";
     }
+
+    /**
+     * builds the sql statement for checking if a book is already issued
+     * @return the sql statement as a string
+     */
+    public static String bookIsAlreadyIssued() {
+        return "SELECT COUNT(*) FROM ISSUE WHERE bookid=?";
+    }
+
+
 
     /**
      * builds the sql statement for deleting an issue by its bookId
@@ -88,6 +178,52 @@ public class SQLStatements {
 
     public static String insertMailServerInfo() {
         return "INSERT INTO MAIL_SERVER_INFO(server_name, server_port, user_email, user_password, ssl_enabled)VALUES(?,?,?,?,?)";
+    }
+
+    public static String getBookTrigger() {
+        return "CREATE TRIGGER updateBookTimeStamp\n" +
+                "AFTER UPDATE OF TITLE, AUTHOR, PUBLISHER, ISAVAIL ON BOOK\n" +
+                "REFERENCING OLD AS EXISTING\n" +
+                "FOR EACH ROW MODE DB2SQL\n" +
+                "UPDATE BOOK SET updated_at = CURRENT_TIMESTAMP\n" +
+                "WHERE ID = EXISTING.ID";
+    }
+
+
+    public static String getIssueTrigger() {
+        return "CREATE TRIGGER updateIssueTimeStamp\n" +
+                "AFTER UPDATE OF memberId, issueTime, renew_count ON ISSUE\n" +
+                "REFERENCING OLD AS EXISTING\n" +
+                "FOR EACH ROW MODE DB2SQL\n" +
+                "UPDATE ISSUE SET updated_at = CURRENT_TIMESTAMP\n" +
+                "WHERE BOOKID = EXISTING.BOOKID";
+    }
+
+    public static String getMemberTrigger() {
+        return "CREATE TRIGGER updateMemberTimeStamp\n" +
+                "AFTER UPDATE OF name, mobile, email ON MEMBER\n" +
+                "REFERENCING OLD AS EXISTING\n" +
+                "FOR EACH ROW MODE DB2SQL\n" +
+                "UPDATE MEMBER SET updated_at = CURRENT_TIMESTAMP\n" +
+                "WHERE id = EXISTING.id";
+    }
+
+    public static String getMailTrigger() {
+        return "CREATE TRIGGER updateMailTimeStamp\n" +
+                "AFTER UPDATE OF server_name, server_port, user_email, user_password, ssl_enabled ON MAIL_SERVER_INFO\n" +
+                "REFERENCING OLD AS EXISTING\n" +
+                "FOR EACH ROW MODE DB2SQL\n" +
+                "UPDATE MAIL_SERVER_INFO SET updated_at = CURRENT_TIMESTAMP\n" +
+                "WHERE server_name = EXISTING.server_name";
+    }
+
+    public static ArrayList<String> getTrigger() {
+        ArrayList<String> arr = new ArrayList<>();
+        arr.add(getMemberTrigger());
+        arr.add(getBookTrigger());
+        arr.add(getIssueTrigger());
+        arr.add(getMailTrigger());
+        return arr;
     }
 
     public static String getBookTrigger() {

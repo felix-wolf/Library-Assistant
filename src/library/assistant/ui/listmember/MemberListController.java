@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import library.assistant.alert.AlertMaker;
 import library.assistant.database.DatabaseHandler;
+import library.assistant.database.SQLStatements;
 import library.assistant.ui.addbook.BookAddController;
 import library.assistant.ui.addmember.MemberAddController;
 import library.assistant.ui.main.MainController;
@@ -72,7 +73,7 @@ public class MemberListController implements Initializable {
         list.clear();
 
         DatabaseHandler handler = DatabaseHandler.getInstance();
-        String qu = "SELECT * FROM MEMBER";
+        String qu = SQLStatements.getAllFromMembers();
         ResultSet rs = handler.execQuery(qu);
         try {
             while (rs.next()) {
