@@ -80,7 +80,7 @@ public class MemberAddController implements Initializable {
         Member member = new Member(mName, mID, mMobile, mEmail);
         boolean result = DataHelper.insertNewMember(member);
         if (result) {
-            DatabaseHandler.getInstance().createOutboxRow(OperationType.INSERT, ObjectType.MEMBER, member);
+            DatabaseHandler.getInstance().createOutboxRow(OperationType.INSERT, ObjectType.MEMBER, member.getMember());
             AlertMaker.showMaterialDialog(rootPane, mainContainer, new ArrayList<>(), "New member added", mName + " has been added");
             clearEntries();
         } else {
@@ -108,7 +108,7 @@ public class MemberAddController implements Initializable {
     private void handleUpdateMember() {
         Member member = new MemberListController.Member(name.getText(), id.getText(), mobile.getText(), email.getText());
         if (DatabaseHandler.getInstance().updateMember(member)) {
-            DatabaseHandler.getInstance().createOutboxRow(OperationType.UPDATE, ObjectType.MEMBER, member);
+            DatabaseHandler.getInstance().createOutboxRow(OperationType.UPDATE, ObjectType.MEMBER, member.getMember());
             AlertMaker.showMaterialDialog(rootPane, mainContainer, new ArrayList<>(), "Success", "Member data updated.");
         } else {
             AlertMaker.showMaterialDialog(rootPane, mainContainer, new ArrayList<>(), "Failed", "Cant update member.");

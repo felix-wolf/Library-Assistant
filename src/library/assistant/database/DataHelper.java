@@ -45,13 +45,9 @@ public class DataHelper {
             statement.setString(2, member.getName());
             statement.setString(3, member.getMobile());
             statement.setString(4, member.getEmail());
-            DatabaseHandler.getInstance().createOutboxRow(
-                    OperationType.INSERT, ObjectType.MEMBER,
-                    new library.assistant.data.model.Member(member.getId(), member.getName(), member.getEmail(), member.getMobile())
-            );
             return statement.executeUpdate() > 0;
         } catch (SQLException ex) {
-            LOGGER.log(Level.ERROR, "{}", ex.getErrorCode());
+            LOGGER.log(Level.ERROR, ex.getLocalizedMessage());
         }
         return false;
     }

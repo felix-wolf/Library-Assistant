@@ -164,7 +164,7 @@ public final class DatabaseHandler {
                 return new library.assistant.data.model.Book(bookId, name, author, publisher, status);
             }
         } catch(SQLException ex) {
-            java.util.logging.Logger.getLogger(MainController.class.getName()).log(java.util.logging.Level.SEVERE, ex.getLocalizedMessage());
+            LOGGER.log(Level.ERROR, ex.getLocalizedMessage());
         }
         return null;
     }
