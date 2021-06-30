@@ -6,16 +6,16 @@ public class Issue {
     private final String memberId;
     private final String bookId;
     private int renewCount;
-    private final Timestamp timestamp;
+    private final long timestamp;
 
-    public Issue(String memberId, String bookId, Timestamp timestamp) {
+    public Issue(String memberId, String bookId, long timestamp) {
         this.bookId = bookId;
         this.memberId = memberId;
         this.timestamp = timestamp;
         this.renewCount = 0;
     }
 
-    public Issue(String memberId, String bookId, int renewCount, Timestamp timestamp) {
+    public Issue(String memberId, String bookId, int renewCount, long timestamp) {
         this.bookId = bookId;
         this.memberId = memberId;
         this.timestamp = timestamp;
@@ -34,7 +34,7 @@ public class Issue {
         return renewCount;
     }
 
-    public Timestamp getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 

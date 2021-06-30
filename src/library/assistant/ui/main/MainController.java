@@ -246,7 +246,7 @@ public class MainController implements Initializable, BookReturnCallback {
                 book.setIsAvail(false);
                 DatabaseHandler.getInstance().createOutboxRow(
                         OperationType.INSERT, ObjectType.ISSUE,
-                        new Issue(memberID, bookID, new Timestamp(System.currentTimeMillis()))
+                        new Issue(memberID, bookID, new Timestamp(System.currentTimeMillis()).getTime())
                 );
                 DatabaseHandler.getInstance().createOutboxRow(
                         OperationType.UPDATE, ObjectType.BOOK,

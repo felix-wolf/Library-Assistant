@@ -177,7 +177,7 @@ public final class DatabaseHandler {
                 String memberId = rs.getString("memberid");
                 Timestamp timestamp = rs.getTimestamp("issueTime");
                 int renewCount = rs.getInt("renew_count");
-                return new Issue(memberId, bookId, renewCount, timestamp);
+                return new Issue(memberId, bookId, renewCount, timestamp.getTime());
             }
         } catch(SQLException ex) {
             java.util.logging.Logger.getLogger(MainController.class.getName()).log(java.util.logging.Level.SEVERE, ex.getLocalizedMessage());
