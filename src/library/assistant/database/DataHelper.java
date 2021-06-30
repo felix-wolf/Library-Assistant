@@ -6,6 +6,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import library.assistant.data.model.Book;
 import library.assistant.data.model.MailServerInfo;
+import library.assistant.data.model.ObjectType;
+import library.assistant.data.model.OperationType;
 import library.assistant.ui.listmember.MemberListController.Member;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -107,7 +109,11 @@ public class DataHelper {
 
     public static boolean updateMailServerInfo(MailServerInfo mailServerInfo) {
         try {
+            MailServerInfo oldInfo = loadMailServerInfo();
             wipeTable("MAIL_SERVER_INFO");
+            if (oldInfo != null) {
+                DatabaseHandler.getInstance().createOutboxRow(OperationType.DELETE, ObjectType.MAIL_SERVER_INFO, oldInfo);
+            }
             PreparedStatement statement = DatabaseHandler.getInstance().getConnection().prepareStatement(
                     "INSERT INTO MAIL_SERVER_INFO(server_name,server_port,user_email,user_password,ssl_enabled) VALUES(?,?,?,?,?)");
             statement.setString(1, mailServerInfo.getMailServer());
@@ -115,6 +121,7 @@ public class DataHelper {
             statement.setString(3, mailServerInfo.getEmailID());
             statement.setString(4, mailServerInfo.getPassword());
             statement.setBoolean(5, mailServerInfo.getSslEnabled());
+            DatabaseHandler.getInstance().createOutboxRow(OperationType.INSERT, ObjectType.MAIL_SERVER_INFO, mailServerInfo);
             return statement.executeUpdate() > 0;
         } catch (SQLException ex) {
             LOGGER.log(Level.ERROR, "{}", ex.toString());
