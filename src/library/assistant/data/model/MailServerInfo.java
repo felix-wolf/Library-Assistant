@@ -9,14 +9,14 @@ public class MailServerInfo {
 
     private final String mailServer;
     private final Integer port;
-    private final String emailID;
+    private final String emailId;
     private final String password;
     private final Boolean sslEnabled;
     
     public MailServerInfo(String mailServer, Integer port, String emailID, String password, Boolean sslEnabled) {
         this.mailServer = mailServer;
         this.port = port;
-        this.emailID = emailID;
+        this.emailId = emailID;
         this.password = password;
         this.sslEnabled = sslEnabled;
     }
@@ -30,7 +30,7 @@ public class MailServerInfo {
     }
 
     public String getEmailID() {
-        return emailID;
+        return emailId;
     }
 
     public String getPassword() {
@@ -43,11 +43,11 @@ public class MailServerInfo {
     
     @Override
     public String toString() {
-        return String.format("%s:%d @ %s", mailServer, port, emailID);
+        return String.format("%s:%d @ %s", mailServer, port, emailId);
     }
 
     public boolean validate() {
-        boolean flag = mailServer == null || mailServer.isEmpty() || port == null || emailID == null || emailID.isEmpty() || password.isEmpty();
+        boolean flag = mailServer == null || mailServer.isEmpty() || port == null || emailId == null || emailId.isEmpty() || password.isEmpty();
         return !flag;
     }
 
@@ -56,11 +56,11 @@ public class MailServerInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MailServerInfo that = (MailServerInfo) o;
-        return Objects.equals(mailServer, that.mailServer) && Objects.equals(port, that.port) && Objects.equals(emailID, that.emailID) && Objects.equals(password, that.password) && Objects.equals(sslEnabled, that.sslEnabled);
+        return Objects.equals(mailServer, that.mailServer) && Objects.equals(port, that.port) && Objects.equals(emailId, that.emailId) && Objects.equals(password, that.password) && Objects.equals(sslEnabled, that.sslEnabled);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mailServer, port, emailID, password, sslEnabled);
+        return Objects.hash(mailServer, port, emailId, password, sslEnabled);
     }
 }

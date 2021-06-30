@@ -9,11 +9,11 @@ public class Book {
     String title;
     String author;
     String publisher;
-    Boolean isAvail;
+    Boolean isAvailable;
 
     public Book(String id, boolean isAvail) {
         this.id = id;
-        this.isAvail = isAvail;
+        this.isAvailable = isAvail;
     }
 
     public Book(String id, String title, String author, String publisher, Boolean isAvail) {
@@ -21,7 +21,7 @@ public class Book {
         this.title = title;
         this.author = author;
         this.publisher = publisher;
-        this.isAvail = isAvail;
+        this.isAvailable = isAvail;
     }
 
     public String getId() {
@@ -57,11 +57,11 @@ public class Book {
     }
 
     public Boolean getAvailability() {
-        return isAvail;
+        return isAvailable;
     }
 
     public void setIsAvail(Boolean isAvail) {
-        this.isAvail = isAvail;
+        this.isAvailable = isAvail;
     }
     
     
