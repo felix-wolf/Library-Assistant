@@ -11,6 +11,11 @@ public class Book {
     String publisher;
     Boolean isAvail;
 
+    public Book(String id, boolean isAvail) {
+        this.id = id;
+        this.isAvail = isAvail;
+    }
+
     public Book(String id, String title, String author, String publisher, Boolean isAvail) {
         this.id = id;
         this.title = title;
