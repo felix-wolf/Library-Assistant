@@ -1,10 +1,15 @@
 package library.assistant.database;
 
+import com.google.gson.Gson;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.chart.PieChart;
+import library.assistant.data.model.Issue;
+import library.assistant.data.model.ObjectType;
+import library.assistant.data.model.OperationType;
 import library.assistant.ui.listbook.BookListController.Book;
 import library.assistant.ui.listmember.MemberListController;
+import library.assistant.ui.main.MainController;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -139,6 +144,45 @@ public final class DatabaseHandler {
             System.out.println("Exception at execQuery:dataHandler" + ex.getLocalizedMessage());
             return false;
         }
+    }
+
+    public void createOutboxRow(OperationType operationType, ObjectType objectType, Object object) {
+        String queryString = "INSERT INTO OUTBOX(operationType, objectType, object) VALUES ('" +
+                operationType.name() + "', '" + objectType.name() + "', '" + new Gson().toJson(object) + "')";
+        execAction(queryString);
+    }
+
+    public library.assistant.data.model.Book getBookById(String id) {
+        ResultSet rs = execQuery(SQLStatements.getBookById(id));
+        try {
+            if (rs.next()) {
+                String bookId = rs.getString("id");
+                String name = rs.getString("title");
+                String author = rs.getString("author");
+                String publisher = rs.getString("publisher");
+                boolean status = rs.getBoolean("isAvail");
+                return new library.assistant.data.model.Book(bookId, name, author, publisher, status);
+            }
+        } catch(SQLException ex) {
+            java.util.logging.Logger.getLogger(MainController.class.getName()).log(java.util.logging.Level.SEVERE, ex.getLocalizedMessage());
+        }
+        return null;
+    }
+
+    public library.assistant.data.model.Issue getIssueByBookId(String id) {
+        ResultSet rs = execQuery(SQLStatements.getIssueById(id));
+        try {
+            if (rs.next()) {
+                String bookId = rs.getString("bookid");
+                String memberId = rs.getString("memberid");
+                Timestamp timestamp = rs.getTimestamp("issueTime");
+                int renewCount = rs.getInt("renew_count");
+                return new Issue(memberId, bookId, renewCount, timestamp);
+            }
+        } catch(SQLException ex) {
+            java.util.logging.Logger.getLogger(MainController.class.getName()).log(java.util.logging.Level.SEVERE, ex.getLocalizedMessage());
+        }
+        return null;
     }
 
     public boolean deleteBook(Book book) {
