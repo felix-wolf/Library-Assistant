@@ -18,6 +18,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import library.assistant.alert.AlertMaker;
+import library.assistant.data.model.ObjectType;
+import library.assistant.data.model.OperationType;
 import library.assistant.database.DatabaseHandler;
 import library.assistant.database.SQLStatements;
 import library.assistant.ui.addbook.BookAddController;
@@ -111,6 +113,7 @@ public class MemberListController implements Initializable {
         if (answer.get() == ButtonType.OK) {
             boolean result = DatabaseHandler.getInstance().deleteMember(selectedForDeletion);
             if (result) {
+                DatabaseHandler.getInstance().createOutboxRow(OperationType.DELETE, ObjectType.MEMBER, selectedForDeletion.getMember());
                 AlertMaker.showSimpleAlert("Book deleted", selectedForDeletion.getName() + " was deleted successfully.");
                 list.remove(selectedForDeletion);
             } else {
@@ -139,7 +142,7 @@ public class MemberListController implements Initializable {
             Parent parent = loader.load();
 
             MemberAddController controller = loader.getController();
-            controller.infalteUI(selectedForEdit);
+            controller.inflateUI(selectedForEdit);
 
             Stage stage = new Stage(StageStyle.DECORATED);
             stage.setTitle("Edit Member");
@@ -203,6 +206,12 @@ public class MemberListController implements Initializable {
 
         public String getEmail() {
             return email.get();
+        }
+
+        public library.assistant.data.model.Member getMember() {
+            return new library.assistant.data.model.Member(
+                    getId(), getName(), getEmail(), getMobile()
+            );
         }
 
     }
