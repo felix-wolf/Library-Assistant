@@ -20,6 +20,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import library.assistant.alert.AlertMaker;
+import library.assistant.data.model.Book;
+import library.assistant.data.model.Issue;
+import library.assistant.data.model.ObjectType;
+import library.assistant.data.model.OperationType;
 import library.assistant.database.DataHelper;
 import library.assistant.database.DatabaseHandler;
 import library.assistant.ui.callback.BookReturnCallback;
@@ -44,7 +48,7 @@ import static library.assistant.database.SQLStatements.*;
 
 public class MainController implements Initializable, BookReturnCallback {
 
-    private static final String BOOK_NOT_AVAILABLE = "Not Available";
+    private static final String BOOK_NOT_AVAILABLE = "Issued on";
     private static final String NO_SUCH_BOOK_AVAILABLE = "No Such Book Available";
     private static final String NO_SUCH_MEMBER_AVAILABLE = "No Such Member Available";
     private static final String BOOK_AVAILABLE = "Available";
@@ -214,7 +218,7 @@ public class MainController implements Initializable, BookReturnCallback {
             AlertMaker.showMaterialDialog(rootPane, rootAnchorPane, Collections.singletonList(btn), "Invalid Input", null);
             return;
         }
-        if (bookStatus.getText().equals(BOOK_NOT_AVAILABLE)) {
+        if (bookStatus.getText().contains(BOOK_NOT_AVAILABLE)) {
             JFXButton btn = new JFXButton("Okay!");
             JFXButton viewDetails = new JFXButton("View Details");
             viewDetails.addEventHandler(MouseEvent.MOUSE_CLICKED, (MouseEvent e) -> {

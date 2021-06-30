@@ -9,6 +9,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import library.assistant.alert.AlertMaker;
 import library.assistant.data.model.Book;
+import library.assistant.data.model.ObjectType;
+import library.assistant.data.model.OperationType;
 import library.assistant.database.DataHelper;
 import library.assistant.database.DatabaseHandler;
 import library.assistant.ui.listbook.BookListController;
@@ -74,6 +76,7 @@ public class BookAddController implements Initializable {
         Book book = new Book(bookID, bookName, bookAuthor, bookPublisher, Boolean.TRUE);
         boolean result = DataHelper.insertNewBook(book);
         if (result) {
+            DatabaseHandler.getInstance().createOutboxRow(OperationType.INSERT, ObjectType.BOOK, book);
             AlertMaker.showMaterialDialog(rootPane, mainContainer, new ArrayList<>(), "New book added", bookName + " has been added");
             clearEntries();
         } else {
@@ -119,6 +122,8 @@ public class BookAddController implements Initializable {
     private void handleEditOperation() {
         BookListController.Book book = new BookListController.Book(title.getText(), id.getText(), author.getText(), publisher.getText(), true);
         if (databaseHandler.updateBook(book)) {
+            Book book1 = DatabaseHandler.getInstance().getBookById(book.getId());
+            DatabaseHandler.getInstance().createOutboxRow(OperationType.UPDATE, ObjectType.BOOK, book1);
             AlertMaker.showMaterialDialog(rootPane, mainContainer, new ArrayList<>(), "Success", "Update complete");
         } else {
             AlertMaker.showMaterialDialog(rootPane, mainContainer, new ArrayList<>(), "Failed", "Could not update data");

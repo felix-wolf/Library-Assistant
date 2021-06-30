@@ -18,6 +18,8 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import library.assistant.alert.AlertMaker;
+import library.assistant.data.model.ObjectType;
+import library.assistant.data.model.OperationType;
 import library.assistant.database.DatabaseHandler;
 import library.assistant.database.SQLStatements;
 import library.assistant.ui.addbook.BookAddController;
@@ -114,6 +116,7 @@ public class BookListController implements Initializable {
         if (answer.get() == ButtonType.OK) {
             boolean result = DatabaseHandler.getInstance().deleteBook(selectedForDeletion);
             if (result) {
+                DatabaseHandler.getInstance().createOutboxRow(OperationType.DELETE, ObjectType.BOOK, selectedForDeletion.getBook());
                 AlertMaker.showSimpleAlert("Book deleted", selectedForDeletion.getTitle() + " was deleted successfully.");
                 list.remove(selectedForDeletion);
             } else {
@@ -217,6 +220,12 @@ public class BookListController implements Initializable {
 
         public String getAvailability() {
             return availability.get();
+        }
+
+        public library.assistant.data.model.Book getBook() {
+            return new library.assistant.data.model.Book(
+                    getId(), getTitle(), getAuthor(), getPublisher(), Boolean.getBoolean(getAvailability())
+            );
         }
 
     }
