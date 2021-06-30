@@ -241,6 +241,17 @@ public class MainController implements Initializable, BookReturnCallback {
             System.out.println(str + " and " + str2);
 
             if (databaseHandler.execAction(str) && databaseHandler.execAction(str2)) {
+                Book book = DatabaseHandler.getInstance().getBookById(bookID);
+                assert book != null;
+                book.setIsAvail(false);
+                DatabaseHandler.getInstance().createOutboxRow(
+                        OperationType.INSERT, ObjectType.ISSUE,
+                        new Issue(memberID, bookID, new Timestamp(System.currentTimeMillis()))
+                );
+                DatabaseHandler.getInstance().createOutboxRow(
+                        OperationType.UPDATE, ObjectType.BOOK,
+                        book
+                );
                 JFXButton button = new JFXButton("Done!");
                 button.setOnAction((actionEvent) -> bookIDInput.requestFocus());
                 AlertMaker.showMaterialDialog(rootPane, rootAnchorPane, Collections.singletonList(button), "Book Issue Complete", null);
@@ -319,8 +330,12 @@ public class MainController implements Initializable, BookReturnCallback {
             String id = bookID.getText();
             String ac1 = deleteIssueById(id);
             String ac2 = setBookAvailability(id, true);
-
+            Issue issue = DatabaseHandler.getInstance().getIssueByBookId(bookID.getText());
             if (databaseHandler.execAction(ac1) && databaseHandler.execAction(ac2)) {
+                assert issue != null;
+                Book book = DatabaseHandler.getInstance().getBookById(bookID.getText());
+                DatabaseHandler.getInstance().createOutboxRow(OperationType.DELETE, ObjectType.ISSUE, issue);
+                DatabaseHandler.getInstance().createOutboxRow(OperationType.UPDATE, ObjectType.BOOK, book);
                 JFXButton btn = new JFXButton("Done!");
                 btn.setOnAction((actionEvent) -> bookID.requestFocus());
                 AlertMaker.showMaterialDialog(rootPane, rootAnchorPane, Collections.singletonList(btn), "Book has been submitted", null);
@@ -352,6 +367,9 @@ public class MainController implements Initializable, BookReturnCallback {
             String ac = updateIssue(bookID.getText());
             System.out.println(ac);
             if (databaseHandler.execAction(ac)) {
+                Issue issue = DatabaseHandler.getInstance().getIssueByBookId(bookID.getText());
+                assert issue != null;
+                DatabaseHandler.getInstance().createOutboxRow(OperationType.UPDATE, ObjectType.ISSUE, issue);
                 JFXButton btn = new JFXButton("Alright!");
                 AlertMaker.showMaterialDialog(rootPane, rootAnchorPane, Collections.singletonList(btn), "Book Has Been Renewed", null);
                 disableEnableControls(false);
