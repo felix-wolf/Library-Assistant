@@ -1,7 +1,5 @@
 package library.assistant.database;
 
-import java.util.ArrayList;
-
 /**
  * This class aggregates *nearly* all sql statements
  * that where used throughout the application.
@@ -26,6 +24,15 @@ public class SQLStatements {
      */
     public static String getAllFromBooks() {
         return "SELECT * FROM BOOK";
+    }
+
+    /**
+     * builds the sql statement for getting a book by its id
+     * @param id the id of the book
+     * @return the sql statement as a string
+     */
+    public static String getBookById(String id) {
+        return "SELECT * FROM BOOK WHERE id = '" + id + "'";
     }
 
     /**
@@ -95,6 +102,15 @@ public class SQLStatements {
      */
     public static String updateIssue(String bookId) {
         return "UPDATE ISSUE SET issueTime = CURRENT_TIMESTAMP, renew_count = renew_count+1 WHERE BOOKID = '" + bookId + "'";
+    }
+
+    /**
+     * builds the sql statement for getting an issue by its id
+     * @param id the bookid of the book associated with the issue
+     * @return the sql statement as a string
+     */
+    public static String getIssueById(String id) {
+        return "SELECT * FROM ISSUE WHERE bookid = '" + id + "'";
     }
 
     /**
@@ -176,49 +192,4 @@ public class SQLStatements {
                 + "WHERE ISSUE.bookID='" + bookId + "'";
     }
 
-    public static String getBookTrigger() {
-        return "CREATE TRIGGER updateBookTimeStamp\n" +
-                "AFTER UPDATE OF TITLE, AUTHOR, PUBLISHER, ISAVAIL ON BOOK\n" +
-                "REFERENCING OLD AS EXISTING\n" +
-                "FOR EACH ROW MODE DB2SQL\n" +
-                "UPDATE BOOK SET updated_at = CURRENT_TIMESTAMP\n" +
-                "WHERE ID = EXISTING.ID";
-    }
-
-
-    public static String getIssueTrigger() {
-        return "CREATE TRIGGER updateIssueTimeStamp\n" +
-                "AFTER UPDATE OF memberId, issueTime, renew_count ON ISSUE\n" +
-                "REFERENCING OLD AS EXISTING\n" +
-                "FOR EACH ROW MODE DB2SQL\n" +
-                "UPDATE ISSUE SET updated_at = CURRENT_TIMESTAMP\n" +
-                "WHERE BOOKID = EXISTING.BOOKID";
-    }
-
-    public static String getMemberTrigger() {
-        return "CREATE TRIGGER updateMemberTimeStamp\n" +
-                "AFTER UPDATE OF name, mobile, email ON MEMBER\n" +
-                "REFERENCING OLD AS EXISTING\n" +
-                "FOR EACH ROW MODE DB2SQL\n" +
-                "UPDATE MEMBER SET updated_at = CURRENT_TIMESTAMP\n" +
-                "WHERE id = EXISTING.id";
-    }
-
-    public static String getMailTrigger() {
-        return "CREATE TRIGGER updateMailTimeStamp\n" +
-                "AFTER UPDATE OF server_name, server_port, user_email, user_password, ssl_enabled ON MAIL_SERVER_INFO\n" +
-                "REFERENCING OLD AS EXISTING\n" +
-                "FOR EACH ROW MODE DB2SQL\n" +
-                "UPDATE MAIL_SERVER_INFO SET updated_at = CURRENT_TIMESTAMP\n" +
-                "WHERE server_name = EXISTING.server_name";
-    }
-
-    public static ArrayList<String> getTrigger() {
-        ArrayList<String> arr = new ArrayList<>();
-        arr.add(getMemberTrigger());
-        arr.add(getBookTrigger());
-        arr.add(getIssueTrigger());
-        arr.add(getMailTrigger());
-        return arr;
-    }
 }
